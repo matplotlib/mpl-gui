@@ -1,3 +1,4 @@
+"""Module for managing if we are "interactive" or not."""
 from matplotlib import is_interactive, interactive as _interactive
 
 
