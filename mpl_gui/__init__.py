@@ -19,7 +19,7 @@ import functools
 from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
-from ._manage_backend import switch_backend
+from ._manage_backend import switch_backend, current_backend_module as _cbm
 from ._creation import promote_figure as _promote_figure
 from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
 
@@ -71,11 +71,10 @@ def show(figs, *, block=None, timeout=0):
     if block is None:
         block = not is_interactive()
 
-    if block and len(managers) > 0:
+    if block:
         # TODO expose the main loop more elegantly!
         # TODO make timeout work!
-        m1, *_ = managers
-        m1.canvas.start_event_loop(timeout=timeout)
+        _cbm().Show().mainloop()
 
 
 class FigureContext:
