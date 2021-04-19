@@ -1,5 +1,36 @@
 """Module for managing if we are "interactive" or not."""
-from matplotlib import is_interactive, interactive as _interactive
+from matplotlib import is_interactive as _is_interact, interactive as _interactive
+
+
+def is_interactive():
+    """
+    Return whether plots are updated after every plotting command.
+
+    The interactive mode is mainly useful if you build plots from the command
+    line and want to see the effect of each command while you are building the
+    figure.
+
+    In interactive mode:
+
+    - newly created figures will be shown immediately;
+    - figures will automatically redraw on change;
+    - `mpl_gui.show` will not block by default.
+    - `mpl_gui.FigureContext` will not block on ``__exit__`` by default.
+
+    In non-interactive mode:
+
+    - newly created figures and changes to figures will not be reflected until
+      explicitly asked to be;
+    - `mpl_gui.show` will block by default.
+    - `mpl_gui.FigureContext` will block on ``__exit__`` by default.
+
+    See Also
+    --------
+    ion : Enable interactive mode.
+    ioff : Disable interactive mode.
+    show : Show all figures (and maybe block).
+    """
+    return _is_interact()
 
 
 class _IoffContext:
@@ -57,9 +88,8 @@ def ioff():
     See Also
     --------
     ion : Enable interactive mode.
-    isinteractive : Whether interactive mode is enabled.
+    is_interactive : Whether interactive mode is enabled.
     show : Show all figures (and maybe block).
-    pause : Show all figures, and block for a time.
 
     Notes
     -----
@@ -67,14 +97,14 @@ def ioff():
 
         # if interactive mode is on
         # then figures will be shown on creation
-        plt.ion()
+        mg.ion()
         # This figure will be shown immediately
-        fig = plt.figure()
+        fig = mg.figure()
 
-        with plt.ioff():
+        with mg.ioff():
             # interactive mode will be off
             # figures will not automatically be shown
-            fig2 = plt.figure()
+            fig2 = mg.figure()
             # ...
 
     To enable usage as a context manager, this function returns an
@@ -93,9 +123,8 @@ def ion():
     See Also
     --------
     ioff : Disable interactive mode.
-    isinteractive : Whether interactive mode is enabled.
+    is_interactive : Whether interactive mode is enabled.
     show : Show all figures (and maybe block).
-    pause : Show all figures, and block for a time.
 
     Notes
     -----
@@ -103,14 +132,14 @@ def ion():
 
         # if interactive mode is off
         # then figures will not be shown on creation
-        plt.ioff()
+        mg.ioff()
         # This figure will not be shown immediately
-        fig = plt.figure()
+        fig = mg.figure()
 
-        with plt.ion():
+        with mg.ion():
             # interactive mode will be on
             # figures will automatically be shown
-            fig2 = plt.figure()
+            fig2 = mg.figure()
             # ...
 
     To enable usage as a context manager, this function returns an
