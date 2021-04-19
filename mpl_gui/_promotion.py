@@ -57,8 +57,7 @@ def promote_figure(fig, *, auto_draw=True):
             return fig.canvas.manager
     # TODO: do we want to make sure we poison / destroy / decouple the existing
     # canavs?
-    canvas = _backend_mod.FigureCanvas(fig)
-    manager = _backend_mod.FigureManager(canvas, next(_figure_count))
+    manager = _backend_mod.new_figure_manager_given_figure(next(_figure_count), fig)
     if fig.get_label():
         manager.set_window_title(fig.get_label())
 
