@@ -3,6 +3,7 @@
 import threading
 import itertools
 
+import matplotlib as mpl
 from matplotlib import is_interactive
 from matplotlib.cbook import _api
 
@@ -67,5 +68,15 @@ def promote_figure(fig, *, auto_draw=True):
     if is_interactive():
         manager.show()
         fig.canvas.draw_idle()
+
+    # HACK: the callback in backend_bases uses GCF.destroy which misses these
+    # figures by design!
+    def _destroy(event):
+
+        if event.key in mpl.rcParams["keymap.quit"]:
+            # TODO add notion of 'close' to managers
+            event.canvas.manager.window.close()
+
+    manager._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy)
 
     return manager
