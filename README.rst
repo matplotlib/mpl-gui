@@ -38,6 +38,9 @@ Python.
 Examples
 --------
 
+.. highlight:: python
+
+
 No pyplot usages
 ++++++++++++++++
 
