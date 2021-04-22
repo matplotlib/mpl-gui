@@ -99,35 +99,35 @@ class FigureContext:
         self._timeout = timeout
         self._forgive_failure = forgive_failure
         self._block = block
-        self._figs = []
+        self.figures = []
 
     def __enter__(self):
         # TODO only allow the creation methods to work when in the context
-        self._figs.clear()
+        self.figures.clear()
         return self
 
     @functools.wraps(figure)
     def figure(self, *args, **kwargs):
         fig = figure(*args, **kwargs)
-        self._figs.append(fig)
+        self.figures.append(fig)
         return fig
 
     @functools.wraps(subplots)
     def subplots(self, *args, **kwargs):
         fig, axs = subplots(*args, **kwargs)
-        self._figs.append(fig)
+        self.figures.append(fig)
         return fig, axs
 
     @functools.wraps(subplot_mosaic)
     def subplot_mosaic(self, *args, **kwargs):
         fig, axd = subplot_mosaic(*args, **kwargs)
-        self._figs.append(fig)
+        self.figures.append(fig)
         return fig, axd
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value is not None and not self._forgive_failure:
             return
-        show(self._figs, block=self._block, timeout=self._timeout)
+        show(self.figures, block=self._block, timeout=self._timeout)
 
     def show(self):
         show(self._figs, block=self._block, timeout=self._timeout)
