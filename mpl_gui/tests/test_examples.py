@@ -1,4 +1,7 @@
 import sys
+
+import pytest
+
 import mpl_gui as mg
 
 
@@ -55,3 +58,19 @@ def test_test_context_timeout():
         fc.subplot_mosaic("A\nB")
     assert "start_event_loop" in fig.canvas.call_info
     assert fig.canvas.call_info["start_event_loop"]["timeout"] == 1
+
+
+@pytest.mark.parametrize("forgiving", [True, False])
+def test_context_exceptions(forgiving):
+    class TestException(Exception):
+        ...
+
+    with pytest.raises(TestException):
+        with mg.FigureContext(block=True, forgive_failure=forgiving) as fc:
+            fig = fc.figure()
+            raise TestException
+
+    if forgiving:
+        assert "start_event_loop" in fig.canvas.call_info
+    else:
+        assert "start_event_loop" not in fig.canvas.call_info
