@@ -12,7 +12,6 @@ This will enable users to both only use the explicit API (nee OO interface) and
 to have smooth integration with the GUI event loop as with pyplot.
 
 """
-
 import logging
 import functools
 
@@ -20,7 +19,7 @@ from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
 from ._manage_backend import switch_backend, current_backend_module as _cbm
-from ._creation import promote_figure as _promote_figure
+from ._promotion import promote_figure as _promote_figure
 from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
 
 from ._version import get_versions
@@ -57,6 +56,9 @@ def show(figs, *, block=None, timeout=0):
 
     """
     # TODO handle single figure
+    if _cbm() is None:
+        # set up the backend!
+        switch_backend()
     managers = []
     for fig in figs:
         if fig.canvas.manager is not None:
@@ -127,9 +129,6 @@ class FigureContext:
             return
         show(self._figs, block=self._block, timeout=self._timeout)
 
-
-# set up the backend!
-switch_backend()
 
 # from mpl_gui import * # is a langauge miss-feature
 __all__ = []
