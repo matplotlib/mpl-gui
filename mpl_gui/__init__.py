@@ -71,10 +71,12 @@ def show(figs, *, block=None, timeout=0):
     if block is None:
         block = not is_interactive()
 
-    if block:
+    if block and len(managers):
         # TODO expose the main loop more elegantly!
         # TODO make timeout work!
-        _cbm().Show().mainloop()
+        # _cbm().Show().mainloop()
+        manager, *_ = managers
+        manager.canvas.start_event_loop(timeout=timeout)
 
 
 class FigureContext:
