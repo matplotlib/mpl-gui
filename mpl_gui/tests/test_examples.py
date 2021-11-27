@@ -66,7 +66,7 @@ def test_context_exceptions(forgiving):
         ...
 
     with pytest.raises(TestException):
-        with mg.FigureContext(block=True, forgive_failure=forgiving) as fc:
+        with mg.FigureContext(block=True, forgive_failure=forgiving, timeout=1) as fc:
             fig = fc.figure()
             raise TestException
 
