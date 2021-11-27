@@ -33,6 +33,7 @@ def test_ion():
         fig, ax = mg.subplots()
         (ln,) = ax.plot(range(5))
         ln.set_color("k")
+        mg.show([fig], timeout=1)
 
 
 def test_ioff():
