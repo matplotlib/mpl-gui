@@ -29,6 +29,11 @@ def switch_backend(newbackend=None):
     ----------
     newbackend : Union[str, _Backend]
         The name of the backend to use or a _Backend class to use.
+
+    Returns
+    -------
+    _Backend
+       The backend selected.
     """
     global _backend_mod
 
@@ -62,18 +67,14 @@ def switch_backend(newbackend=None):
         # are of worse quality.
         for candidate in candidates:
             try:
-                switch_backend(candidate)
+                return switch_backend(candidate)
             except ImportError:
                 continue
-            else:
-                rcParamsOrig["backend"] = candidate
-                return
+
         else:
             # Switching to Agg should always succeed; if it doesn't, let the
             # exception propagate out.
-            switch_backend("agg")
-            rcParamsOrig["backend"] = "agg"
-            return
+            return switch_backend("agg")
 
     if isinstance(newbackend, str):
         # Backends are implemented as modules, but "inherit" default method
@@ -122,3 +123,4 @@ def switch_backend(newbackend=None):
         ip = mod_ipython.get_ipython()
         if ip:
             ip.enable_gui(required_framework)
+    return _backend_mod
