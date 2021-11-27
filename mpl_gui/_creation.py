@@ -1,5 +1,7 @@
 """Helpers to create new Figures."""
 
+from matplotlib import is_interactive
+
 from ._figure import Figure
 from ._promotion import promote_figure
 
@@ -80,7 +82,8 @@ def figure(
         frameon=frameon,
         **kwargs,
     )
-    promote_figure(fig, auto_draw=auto_draw)
+    if is_interactive():
+        promote_figure(fig, auto_draw=auto_draw)
     return fig
 
 
