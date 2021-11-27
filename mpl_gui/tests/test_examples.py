@@ -34,6 +34,7 @@ def test_ion():
         (ln,) = ax.plot(range(5))
         ln.set_color("k")
         mg.show([fig], timeout=1)
+    assert "start_event_loop" not in fig.canvas.call_info
 
 
 def test_ioff():
@@ -44,10 +45,13 @@ def test_ioff():
 def test_timeout():
     fig = mg.Figure()
     mg.show([fig], block=True, timeout=1)
+    assert "start_event_loop" in fig.canvas.call_info
 
 
 def test_test_context_timeout():
     with mg.FigureContext(block=True, timeout=1) as fc:
-        fc.figure()
+        fig = fc.figure()
         fc.subplots()
         fc.subplot_mosaic("A\nB")
+    assert "start_event_loop" in fig.canvas.call_info
+    assert fig.canvas.call_info["start_event_loop"]["timeout"] == 1
