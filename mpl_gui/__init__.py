@@ -129,6 +129,9 @@ class FigureContext:
             return
         show(self._figs, block=self._block, timeout=self._timeout)
 
+    def show(self):
+        show(self._figs, block=self._block, timeout=self._timeout)
+
 
 # from mpl_gui import * # is a langauge miss-feature
 __all__ = []
