@@ -27,11 +27,12 @@ def switch_backend(newbackend=None):
 
     Parameters
     ----------
-    newbackend : str
-        The name of the backend to use.
+    newbackend : Union[str, _Backend]
+        The name of the backend to use or a _Backend class to use.
     """
     global _backend_mod
 
+    # work-around the sentinel resolution in Matplotlib 😱
     if newbackend is None:
         newbackend = dict.__getitem__(rcParams, "backend")
     # make sure the init is pulled up so we can assign to it later
@@ -74,15 +75,23 @@ def switch_backend(newbackend=None):
             rcParamsOrig["backend"] = "agg"
             return
 
-    # Backends are implemented as modules, but "inherit" default method
-    # implementations from backend_bases._Backend.  This is achieved by
-    # creating a "class" that inherits from backend_bases._Backend and whose
-    # body is filled with the module's globals.
+    if isinstance(newbackend, str):
+        # Backends are implemented as modules, but "inherit" default method
+        # implementations from backend_bases._Backend.  This is achieved by
+        # creating a "class" that inherits from backend_bases._Backend and whose
+        # body is filled with the module's globals.
 
-    backend_name = cbook._backend_module_name(newbackend)
+        backend_name = cbook._backend_module_name(newbackend)
 
-    class backend_mod(matplotlib.backend_bases._Backend):
-        locals().update(vars(importlib.import_module(backend_name)))
+        class backend_mod(matplotlib.backend_bases._Backend):
+            locals().update(vars(importlib.import_module(backend_name)))
+
+        rc_params_string = newbackend
+
+    else:
+        backend_mod = newbackend
+        rc_params_string = f"module://_backend_mod_{id(backend_mod)}"
+        sys.modules[rc_params_string] = backend_mod
 
     required_framework = getattr(
         backend_mod.FigureCanvas, "required_interactive_framework", None
@@ -103,7 +112,7 @@ def switch_backend(newbackend=None):
 
     _log.debug("Loaded backend %s version %s.", newbackend, backend_mod.backend_version)
 
-    rcParams["backend"] = rcParamsDefault["backend"] = newbackend
+    rcParams["backend"] = rcParamsDefault["backend"] = rc_params_string
     _backend_mod = backend_mod
 
     # is IPython imported?
