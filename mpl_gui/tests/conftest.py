@@ -1,5 +1,10 @@
 from matplotlib.backend_bases import _Backend, FigureCanvasBase, FigureManagerBase
 import mpl_gui
+import sys
+
+
+# make sure we do not sneakily get pyplot
+sys.modules["matplotlib.pyplot"] = None
 
 
 class TestCanvas(FigureCanvasBase):
