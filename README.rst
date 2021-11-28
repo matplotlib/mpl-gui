@@ -47,7 +47,7 @@ No pyplot usages
 If you want to be sure that this code does not secretly depend on pyplot run ::
 
   import sys
-  sys.module['matplotlib.pyplot'] = None
+  sys.modules['matplotlib.pyplot'] = None
 
 
 which will prevent pyplot from being imported!
