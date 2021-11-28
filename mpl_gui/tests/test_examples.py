@@ -2,7 +2,10 @@ import sys
 
 import pytest
 
+from matplotlib.backend_bases import FigureCanvasBase
+
 import mpl_gui as mg
+
 
 
 def test_no_pyplot():
@@ -73,4 +76,5 @@ def test_context_exceptions(forgiving):
     if forgiving:
         assert "start_event_loop" in fig.canvas.call_info
     else:
-        assert "start_event_loop" not in fig.canvas.call_info
+
+        assert isinstance(fig.canvas, FigureCanvasBase)
