@@ -1,0 +1,7 @@
+# List required packages in this file, one per line.
+matplotlib
+mpl-sphinx-theme
+numpydoc
+sphinx
+sphinx-copybutton
+ipython

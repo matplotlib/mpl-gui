@@ -30,6 +30,7 @@ jobs:
       run: |
         set -vxeuo pipefail
         python -m pip install -r requirements-dev.txt
+        python -m pip install -v .
         python -m pip list
 
     - name: Test with pytest

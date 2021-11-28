@@ -2,15 +2,20 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    = # "-W"  # This flag turns warnings into errors.
+SPHINXOPTS    = -W --keep-going
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = PackagingScientificPython
+SPHINXPROJ    = mpl-gui
 SOURCEDIR     = source
 BUILDDIR      = build
 
 # Put it first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+
+show:
+	@python -c "import webbrowser; webbrowser.open_new_tab('file://$(shell pwd)/build/html/index.html')"
+
 
 .PHONY: help Makefile
 
