@@ -81,14 +81,18 @@ def show(figs, *, block=None, timeout=0):
         manager.canvas.start_event_loop(timeout=timeout)
 
 
-class FigureContext:
+class FigureRegistry:
     """
-    Context manager to create a number of figures and show at once.
+    A registry to wrap the creation of figures and track them.
+
+    This instance will keep a hard reference to created Figures to ensure
+    that they do not get garbage collected.
 
     Parameters
     ----------
     block : bool, optional
-        Whether to wait for all figures to be closed before returning.
+        Whether to wait for all figures to be closed before returning from
+        show_all.
 
         If `True` block and run the GUI main loop until all figure windows
         are closed.
@@ -101,16 +105,14 @@ class FigureContext:
         mode (see `.is_interactive`).
 
     timeout : float, optional
-        How long to block for on exit
+        Default time to wait for all of the Figures to be closed if blocking.
 
-    forgive_failure : bool, optional
-        If True, block to show the figure before letting the exception
-        propagate
+        If 0 block forever.
+
     """
 
-    def __init__(self, *, block=None, timeout=0, forgive_failure=False):
+    def __init__(self, *, block=None, timeout=0):
         self._timeout = timeout
-        self._forgive_failure = forgive_failure
         self._block = block
         self.figures = []
 
@@ -132,7 +134,32 @@ class FigureContext:
         self.figures.append(fig)
         return fig, axd
 
-    def show(self, *, block=None, timeout=None):
+    def show_all(self, *, block=None, timeout=None):
+        """
+        Show all of the Figures that the FigureRegistry knows about.
+
+        Parameters
+        ----------
+        block : bool, optional
+            Whether to wait for all figures to be closed before returning from
+            show_all.
+
+            If `True` block and run the GUI main loop until all figure windows
+            are closed.
+
+            If `False` ensure that all figure windows are displayed and return
+            immediately.  In this case, you are responsible for ensuring
+            that the event loop is running to have responsive figures.
+
+            Defaults to the value set on the Registry at init
+
+        timeout : float, optional
+            time to wait for all of the Figures to be closed if blocking.
+
+            If 0 block forever.
+
+            Defaults to the timeout set on the Registry at init
+        """
         if block is None:
             block = self._block
 
@@ -146,6 +173,44 @@ class FigureContext:
             if manager := getattr(fig.canvas, "manager", None):
                 manager.destroy()
         self.figures.clear()
+
+
+class FigureContext(FigureRegistry):
+    """
+    Extends FigureRegistry to be used as a context manger.
+
+    All figures known to the Registry will be shown on exiting the context.
+
+    Parameters
+    ----------
+    block : bool, optional
+        Whether to wait for all figures to be closed before returning from
+        show_all.
+
+        If `True` block and run the GUI main loop until all figure windows
+        are closed.
+
+        If `False` ensure that all figure windows are displayed and return
+        immediately.  In this case, you are responsible for ensuring
+        that the event loop is running to have responsive figures.
+
+        Defaults to True in non-interactive mode and to False in interactive
+        mode (see `.is_interactive`).
+
+    timeout : float, optional
+        Default time to wait for all of the Figures to be closed if blocking.
+
+        If 0 block forever.
+
+    forgive_failure : bool, optional
+        If True, block to show the figure before letting the exception
+        propagate
+
+    """
+
+    def __init__(self, *, forgive_failure=False, **kwargs):
+        super().__init__(**kwargs)
+        self._forgive_failure = forgive_failure
 
     def __enter__(self):
         return self
