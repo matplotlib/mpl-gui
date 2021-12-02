@@ -101,11 +101,6 @@ class FigureContext:
         self._block = block
         self.figures = []
 
-    def __enter__(self):
-        # TODO only allow the creation methods to work when in the context
-        self.figures.clear()
-        return self
-
     @functools.wraps(figure)
     def figure(self, *args, **kwargs):
         fig = figure(*args, **kwargs)
@@ -124,13 +119,28 @@ class FigureContext:
         self.figures.append(fig)
         return fig, axd
 
+    def show(self, *, block=None, timeout=None):
+        if block is None:
+            block = self._block
+
+        if timeout is None:
+            timeout = self._timeout
+
+        show(self.figures, block=self._block, timeout=self._timeout)
+
+    def close_all(self):
+        for fig in self.figures:
+            if manager := getattr(fig.canvas, "manager", None):
+                manager.destroy()
+        self.figures.clear()
+
+    def __enter__(self):
+        return self
+
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value is not None and not self._forgive_failure:
             return
         show(self.figures, block=self._block, timeout=self._timeout)
-
-    def show(self):
-        show(self._figs, block=self._block, timeout=self._timeout)
 
 
 # from mpl_gui import * # is a langauge miss-feature
