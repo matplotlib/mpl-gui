@@ -24,6 +24,9 @@ class TestManger(FigureManagerBase):
     def show(self):
         self.call_info["show"] = {}
 
+    def destroy(self):
+        self.call_info["destroy"] = {}
+
 
 class TestingBackend(_Backend):
     FigureCanvas = TestCanvas

@@ -15,6 +15,8 @@ to have smooth integration with the GUI event loop as with pyplot.
 import logging
 import functools
 
+from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
+
 from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
@@ -169,9 +171,27 @@ class FigureRegistry:
         show(self.figures, block=self._block, timeout=self._timeout)
 
     def close_all(self):
+        """
+        Close all Figures know to this Registry.
+
+        This will do four things:
+
+        1. call the ``.destory()`` method on the manager
+        2. clears the Figure on the canvas instance
+        3. replace the canvas on each Figure with a new `.FigureCanvasBase` instance
+        4. drops its hard reference to the Figure
+
+        If the user still holds a reference to the Figure it can be revived by
+        passing it to `show`.
+
+        """
         for fig in self.figures:
-            if manager := getattr(fig.canvas, "manager", None):
-                manager.destroy()
+            if fig.canvas.manager is not None:
+                fig.canvas.manager.destroy()
+            # disconnect figure from canvas
+            fig.canvas.figure = None
+            # disconnect canvas from figure
+            _FigureCanvasBase(figure=fig)
         self.figures.clear()
 
 

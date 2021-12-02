@@ -78,3 +78,23 @@ def test_context_exceptions(forgiving):
     else:
 
         assert isinstance(fig.canvas, FigureCanvasBase)
+
+def test_close_all():
+    fr = mg.FigureRegistry(block=False)
+    fig = fr.figure()
+    assert fig in fr.figures
+    assert isinstance(fig.canvas, FigureCanvasBase)
+    old_canvas = fig.canvas
+    fr.show_all()
+    assert fig.canvas is not old_canvas
+    new_canvas = fig.canvas
+    fr.close_all()
+    assert len(fr.figures) == 0
+    assert 'destroy' in new_canvas.manager.call_info
+    assert fig.canvas is not new_canvas
+    assert new_canvas.figure is None
+
+    # test revive
+    old_canvas = fig.canvas
+    mg.show([fig])
+    assert fig.canvas is not old_canvas
