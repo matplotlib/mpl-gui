@@ -170,6 +170,9 @@ class FigureRegistry:
 
         show(self.figures, block=self._block, timeout=self._timeout)
 
+    # alias to easy pyplot compatibility
+    show = show_all
+
     def close_all(self):
         """
         Close all Figures know to this Registry.
@@ -193,6 +196,12 @@ class FigureRegistry:
             # disconnect canvas from figure
             _FigureCanvasBase(figure=fig)
         self.figures.clear()
+
+    def close(self, val):
+        if val != "all":
+            # TODO close figures 1 at a time
+            raise RuntimeError("can only close them all")
+        self.close_all()
 
 
 class FigureContext(FigureRegistry):
