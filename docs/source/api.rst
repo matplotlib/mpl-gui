@@ -9,7 +9,6 @@ Show
    :nosignatures:
 
    mpl_gui.show
-   mpl_gui.FigureContext
 
 
 Interactivity
@@ -27,7 +26,9 @@ Interactivity
 Figure Fabrication
 ------------------
 
-Free standing:
+Un-managed
+++++++++++
+
 
 .. autosummary::
    :toctree: _as_gen
@@ -38,15 +39,33 @@ Free standing:
    mpl_gui.subplot_mosaic
 
 
-In a context manager:
+Managed
++++++++
 
 .. autosummary::
    :toctree: _as_gen
    :nosignatures:
 
-   mpl_gui.FigureContext.figure
-   mpl_gui.FigureContext.subplots
-   mpl_gui.FigureContext.subplot_mosaic
+   mpl_gui.FigureRegistry.figure
+   mpl_gui.FigureRegistry.subplots
+   mpl_gui.FigureRegistry.subplot_mosaic
+   mpl_gui.FigureRegistry.show_all
+   mpl_gui.FigureRegistry.close_all
+
+
+.. autoclass:: mpl_gui.FigureRegistry
+   :no-members:
+   :no-undoc-members:
+   :show-inheritance:
+
+.. autoclass::    mpl_gui.FigureContext
+   :no-members:
+   :no-undoc-members:
+   :show-inheritance:
+
+
+
+
 
 
 Select the backend

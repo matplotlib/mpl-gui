@@ -181,7 +181,7 @@ class FigureRegistry:
 
         1. call the ``.destory()`` method on the manager
         2. clears the Figure on the canvas instance
-        3. replace the canvas on each Figure with a new `.FigureCanvasBase` instance
+        3. replace the canvas on each Figure with a new `~matplotlib.backend_bases.FigureCanvasBase` instance
         4. drops its hard reference to the Figure
 
         If the user still holds a reference to the Figure it can be revived by

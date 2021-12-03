@@ -23,7 +23,7 @@ The pyplot module current serves two critical, but unrelated functions:
 
 1. provide a state-full implicit API that rhymes / was inspired by MATLAB
 2. provide the management of interaction between Matplotlib and the GUI event
-   loop
+   loop, including keeping Figures alive
 
 While it can be very convenient when working at the prompt, the state-full API
 can lead to brittle code that depends on the global state in confusing ways,
@@ -40,9 +40,6 @@ Examples
 .. highlight:: python
 
 
-No pyplot usages
-++++++++++++++++
-
 If you want to be sure that this code does not secretly depend on pyplot run ::
 
   import sys
@@ -55,19 +52,20 @@ which will prevent pyplot from being imported!
 show
 ++++
 
-The core of the API is ``show`` ::
+The core of the API is `~.show` ::
 
   import mpl_gui as mg
-  from mpl_gui import Figure  # shim to pass the label as a kwarg!
+  from matplotlib.figure import Figure
 
-  fig1 = mg.Figure(label='A Label!')
+  fig1 = Figure(label='A Label!')
 
-  fig2 = mg.Figure()
+  fig2 = Figure()
 
   mg.show([fig1, fig2])
 
 
-which will show both figures and block until they are closed.
+which will show both figures and block until they are closed.  As part of the
+"showing" process, the correct `
 
 
 blocking
@@ -77,9 +75,11 @@ Similar to ``plt.ion`` and ``plt.ioff``, we provide ``mg.ion()`` and
 ``mg.ioff()`` which have identical semantics.  Thus :::
 
   import mpl_gui as mg
+  from matplotlib.figure import Figure
+
   mg.ion()
 
-  fig = mg.Figure()
+  fig = Figure()
 
   mg.show([fig])  # will not block
 
@@ -92,27 +92,19 @@ As with ``plt.show``, you can explicitly control the blocking behavior of
 ``mg.show`` via the *block* keyword argument ::
 
   import mpl_gui as mg
+  from matplotlib.figure import Figure
 
-  fig = mg.Figure(label='control blocking')
+  fig = Figure(label='control blocking')
 
   mg.show([fig], block=False)  # will never block
   mg.show([fig], block=True)   # will always block
 
 
-Figure Creation
-+++++++++++++++
+Figure and Axes Creation
+++++++++++++++++++++++++
 
-If you want to use the explicit Matplotlib API and also make use of the GUI integration and management, the easiest path is to start your code with one of ::
-
-  import matplotlib.pyplot as plt
-  fig1 = plt.figure()
-  fig2, axs = plt.subplots(2, 2)
-  fig3, axd = plt.subplot_module('AA\nBC')
-
-  plt.show()
-
-which gets you figures on the screen with a toolbar, but it obligatorily also
-registers those figures with the pyplot global registry.  By analogy we provide ::
+In analogy with `matplotlib.pyplot` we also provide `~mpl_gui.figure`,
+`~mpl_gui.subplots` and `~mpl_gui.subplot_mosaic` ::
 
   import mpl_gui as mg
   fig1 = mg.figure()
@@ -121,13 +113,56 @@ registers those figures with the pyplot global registry.  By analogy we provide 
 
   mg.show([fig1, fig2, fig3])
 
+If ``mpl_gui`` is in "interactive mode",`~mpl_gui.figure`,
+`mpl_gui.subplots` and `mpl_gui.subplot_mosaic` will automatically put the new Figure in a window on the
+screen.
+
+
+
+FigureRegistry
+++++++++++++++
+
+In the above examples it is the responsibility of the user to keep track of the
+`~matplotlib.figure.Figure` instances that are created.  If the user does not keep a hard
+reference to the ``fig`` object, either directly or indirectly through its
+children, then it will be garbage collected like any other Python object.
+While this can be advantageous in some cases (such as scripts or functions that
+create many transient figures).  It loses the convenience of
+`matplotlib.pyplot` keeping track of the instances for you.  To this end we
+also have provided `.FigureRegistry` ::
+
+  import mpl_gui as mg
+
+  fr = mg.FigureRegistry()
+
+  fr.figure()
+  fr.subplots(2, 2)
+  fr.subplot_module('AA\nBC')
+
+  fr.show_all()     # will show all three figures
+  fr.show()         # alias for pyplot compatibility
+
+  fr.close_all()    # will close all three figures
+  fr.close('all')   # alias for pyplot compatibility
+
+Thus, if you are only using this restricted set of the pyplot API then you can change ::
+
+  import matplotlib.pyplot as plt
+
+to ::
+
+  import mg
+  plt = mg.FigureRegistry()
+
+and have a (mostly) drop-in replacement.
 
 FigureContext
 +++++++++++++
 
 A very common use case is to make several figures and then show them all
-together at the end.  To facilitate this we provide a context manager that
-(locally) keeps track of the created figures and shows them on exit ::
+together at the end.  To facilitate this we provide a sub-class of
+`.FigureRegistry` that can be used as a context manager that (locally) keeps
+track of the created figures and shows them on exit ::
 
   import mpl_gui as mg
 
@@ -139,4 +174,4 @@ together at the end.  To facilitate this we provide a context manager that
 
 This will create 3 figures and block on ``__exit__``.  The blocking
 behavior depends on ``mg.is_interacitve()`` (and follow the behavior of
-``mg.show`` or can explicitly controlled via the *block* keyword argument.
+``mg.show`` or can explicitly controlled via the *block* keyword argument).

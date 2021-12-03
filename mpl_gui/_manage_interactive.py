@@ -83,7 +83,7 @@ def ioff():
     """
     Disable interactive mode.
 
-    See `.pyplot.isinteractive` for more details.
+    See `.is_interactive` for more details.
 
     See Also
     --------
@@ -118,7 +118,7 @@ def ion():
     """
     Enable interactive mode.
 
-    See `.pyplot.isinteractive` for more details.
+    See `.is_interactive` for more details.
 
     See Also
     --------

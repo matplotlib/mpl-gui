@@ -43,14 +43,14 @@ def figure(
         If False, suppress drawing the figure frame.
 
     FigureClass : subclass of `~matplotlib.figure.Figure`
-        Optionally use a custom `.Figure` instance.
+        Optionally use a custom `~matplotlib.figure.Figure` instance.
 
     tight_layout : bool or dict, default: :rc:`figure.autolayout`
-        If ``False`` use *subplotpars*. If ``True`` adjust subplot
-        parameters using `.tight_layout` with default padding.
+        If ``False`` use *subplotpars*. If ``True`` adjust subplot parameters
+        using `~matplotlib.figure.Figure.tight_layout` with default padding.
         When providing a dict containing the keys ``pad``, ``w_pad``,
-        ``h_pad``, and ``rect``, the default `.tight_layout` paddings
-        will be overridden.
+        ``h_pad``, and ``rect``, the default
+        `~matplotlib.figure.Figure.tight_layout` paddings will be overridden.
 
     **kwargs : optional
         See `~.matplotlib.figure.Figure` for other possible arguments.
@@ -58,10 +58,11 @@ def figure(
     Returns
     -------
     `~matplotlib.figure.Figure`
-        The `.Figure` instance returned will also be passed to
-        new_figure_manager in the backends, which allows to hook custom
-        `.Figure` classes into the pyplot interface. Additional kwargs will be
-        passed to the `.Figure` init function.
+        The `~matplotlib.figure.Figure` instance returned will also be passed
+        to new_figure_manager in the backends, which allows to hook custom
+        `~matplotlib.figure.Figure` classes into the pyplot
+        interface. Additional kwargs will be passed to the
+        `~matplotlib.figure.Figure` init function.
 
     """
 
@@ -145,13 +146,13 @@ def subplots(
 
     **fig_kw
         All additional keyword arguments are passed to the
-        `.pyplot.figure` call.
+        `.figure` call.
 
     Returns
     -------
-    fig : `~.figure.Figure`
+    fig : `~matplotlib.figure.Figure`
 
-    ax : `.axes.Axes` or array of Axes
+    ax : `~matplotlib.axes.Axes` or array of Axes
         *ax* can be either a single `~matplotlib.axes.Axes` object or an
         array of Axes objects if more than one subplot was created.  The
         dimensions of the resulting array can be controlled with the squeeze
@@ -171,15 +172,13 @@ def subplots(
 
         The names ``ax`` and pluralized ``axs`` are preferred over ``axes``
         because for the latter it's not clear if it refers to a single
-        `~.axes.Axes` instance or a collection of these.
+        `~matplotlib.axes.Axes` instance or a collection of these.
 
     See Also
     --------
-    .pyplot.figure
-    .pyplot.subplot
-    .pyplot.axes
-    .Figure.subplots
-    .Figure.add_subplot
+
+    matplotlib.figure.Figure.subplots
+    matplotlib.figure.Figure.add_subplot
 
     Examples
     --------
@@ -241,7 +240,8 @@ def subplot_mosaic(
     """
     Build a layout of Axes based on ASCII art or nested lists.
 
-    This is a helper function to build complex GridSpec layouts visually.
+    This is a helper function to build complex `~matplotlib.gridspec.GridSpec`
+    layouts visually.
 
     .. note ::
 
@@ -281,11 +281,11 @@ def subplot_mosaic(
         not allow nesting but is very terse.
 
     subplot_kw : dict, optional
-        Dictionary with keywords passed to the `.Figure.add_subplot` call
+        Dictionary with keywords passed to the `~matplotlib.figure.Figure.add_subplot` call
         used to create each subplot.
 
     gridspec_kw : dict, optional
-        Dictionary with keywords passed to the `.GridSpec` constructor used
+        Dictionary with keywords passed to the `~matplotlib.gridspec.GridSpec` constructor used
         to create the grid the subplots are placed on.
 
     empty_sentinel : object, optional
@@ -296,11 +296,11 @@ def subplot_mosaic(
 
     **fig_kw
         All additional keyword arguments are passed to the
-        `.pyplot.figure` call.
+        `.figure` call.
 
     Returns
     -------
-    fig : `~.figure.Figure`
+    fig : `~matplotlib.figure.Figure`
        The new figure
 
     dict[label, Axes]
