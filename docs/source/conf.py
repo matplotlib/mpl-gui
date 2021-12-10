@@ -133,6 +133,7 @@ include_analytics = is_release_build
 if include_analytics:
     html_theme_options["google_analytics_id"] = "UA-55954603-1"
 
+native_site = True
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
