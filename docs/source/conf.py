@@ -28,28 +28,29 @@
 #
 # needs_sphinx = '1.0'
 import sys
-sys.path.append('.')
+
+sys.path.append(".")
 
 
 # Release mode enables optimizations and other related options.
-is_release_build = tags.has('release')  # noqa
+is_release_build = tags.has("release")  # noqa
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
-    'custom_roles',
-    'IPython.sphinxext.ipython_directive',
-    'IPython.sphinxext.ipython_console_highlighting',
-    'matplotlib.sphinxext.plot_directive',
-    'numpydoc',
-    'sphinx_copybutton',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.viewcode",
+    "custom_roles",
+    "IPython.sphinxext.ipython_directive",
+    "IPython.sphinxext.ipython_console_highlighting",
+    "matplotlib.sphinxext.plot_directive",
+    "numpydoc",
+    "sphinx_copybutton",
 ]
 
 # Configuration options for plot_directive. See:
@@ -62,27 +63,28 @@ autosummary_generate = True
 numpydoc_show_class_members = False
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"
 
 # General information about the project.
-project = 'mpl-gui'
-copyright = '2021, Thomas A Caswell'
-author = 'Thomas A Caswell'
+project = "mpl-gui"
+copyright = "2021, Thomas A Caswell"
+author = "Thomas A Caswell"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 import mpl_gui
+
 # The short X.Y version.
 version = mpl_gui.__version__
 # The full version, including alpha/beta/rc tags.
@@ -101,16 +103,16 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
 
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
-default_role = 'obj'
+default_role = "obj"
 
 nitpicky = True
 
@@ -144,7 +146,7 @@ native_site = True
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -152,9 +154,9 @@ html_static_path = ['_static']
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
-    '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
+    "**": [
+        "relations.html",  # needs 'show_related': True theme option to display
+        "searchbox.html",
     ]
 }
 
@@ -162,7 +164,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'mpl-gui'
+htmlhelp_basename = "mpl-gui"
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -171,15 +173,12 @@ latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',
-
     # The font size ('10pt', '11pt' or '12pt').
     #
     # 'pointsize': '10pt',
-
     # Additional stuff for the LaTeX preamble.
     #
     # 'preamble': '',
-
     # Latex figure (float) alignment
     #
     # 'figure_align': 'htbp',
@@ -189,8 +188,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'mpl-gui.tex', 'mpl-gui Documentation',
-     'Contributors', 'manual'),
+    (master_doc, "mpl-gui.tex", "mpl-gui Documentation", "Contributors", "manual"),
 ]
 
 
@@ -198,10 +196,7 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    (master_doc, 'mpl-gui', 'mpl-gui Documentation',
-     [author], 1)
-]
+man_pages = [(master_doc, "mpl-gui", "mpl-gui Documentation", [author], 1)]
 
 
 # -- Options for Texinfo output -------------------------------------------
@@ -210,16 +205,20 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'mpl-gui', 'mpl-gui Documentation',
-     author, 'mpl-gui', 'Prototype project for splitting pyplot in half',
-     'Miscellaneous'),
+    (
+        master_doc,
+        "mpl-gui",
+        "mpl-gui Documentation",
+        author,
+        "mpl-gui",
+        "Prototype project for splitting pyplot in half",
+        "Miscellaneous",
+    ),
 ]
-
-
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None),
-    'matplotlib': ('https://matplotlib.org/stable', None),
+    "python": ("https://docs.python.org/3/", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
 }
