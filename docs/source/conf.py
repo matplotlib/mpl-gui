@@ -124,7 +124,7 @@ nitpicky = True
 html_theme = "mpl_sphinx_theme"
 
 html_theme_options = {
-    "native_site": True,
+    "native_site": False,
     "logo_link": "index",
     # collapse_navigation in pydata-sphinx-theme is slow, so skipped for local
     # and CI builds https://github.com/pydata/pydata-sphinx-theme/pull/386
@@ -135,7 +135,7 @@ include_analytics = is_release_build
 if include_analytics:
     html_theme_options["google_analytics_id"] = "UA-55954603-1"
 
-native_site = True
+native_site = False
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
