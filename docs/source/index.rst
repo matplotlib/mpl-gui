@@ -109,7 +109,7 @@ In analogy with `matplotlib.pyplot` we also provide `~mpl_gui.figure`,
   import mpl_gui as mg
   fig1 = mg.figure()
   fig2, axs = mg.subplots(2, 2)
-  fig3, axd = mg.subplot_module('AA\nBC')
+  fig3, axd = mg.subplot_mosaic('AA\nBC')
 
   mg.show([fig1, fig2, fig3])
 
@@ -137,7 +137,7 @@ also have provided `.FigureRegistry` ::
 
   fr.figure()
   fr.subplots(2, 2)
-  fr.subplot_module('AA\nBC')
+  fr.subplot_mosaic('AA\nBC')
 
   fr.show_all()     # will show all three figures
   fr.show()         # alias for pyplot compatibility
