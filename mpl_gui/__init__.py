@@ -78,9 +78,11 @@ def show(figs, *, block=None, timeout=0):
     if block and len(managers):
         # TODO expose the main loop more elegantly!
         # TODO make timeout work!
-        # _cbm().Show().mainloop()
-        manager, *_ = managers
-        manager.canvas.start_event_loop(timeout=timeout)
+        if timeout == 0:
+            _cbm().Show().mainloop()
+        elif len(managers):
+            manager, *_ = managers
+            manager.canvas.start_event_loop(timeout=timeout)
 
 
 class FigureRegistry:
