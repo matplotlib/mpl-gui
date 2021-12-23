@@ -74,7 +74,7 @@ def promote_figure(fig, *, auto_draw=True):
 
         if event.key in mpl.rcParams["keymap.quit"]:
             # TODO add notion of 'close' to managers
-            event.canvas.manager.window.close()
+            event.canvas.manager.destroy()
 
     manager._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy)
 
