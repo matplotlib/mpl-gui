@@ -76,8 +76,6 @@ def show(figs, *, block=None, timeout=0):
         block = not is_interactive()
 
     if block and len(managers):
-        # TODO expose the main loop more elegantly!
-        # TODO make timeout work!
         if timeout == 0:
             _cbm().Show().mainloop()
         elif len(managers):

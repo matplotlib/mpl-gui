@@ -1,4 +1,9 @@
-from matplotlib.backend_bases import _Backend, FigureCanvasBase, FigureManagerBase
+from matplotlib.backend_bases import (
+    _Backend,
+    FigureCanvasBase,
+    FigureManagerBase,
+    ShowBase,
+)
 import mpl_gui
 import sys
 
@@ -28,9 +33,15 @@ class TestManger(FigureManagerBase):
         self.call_info["destroy"] = {}
 
 
+class TestShow(ShowBase):
+    def mainloop(self):
+        ...
+
+
 class TestingBackend(_Backend):
     FigureCanvas = TestCanvas
     FigureManager = TestManger
+    Show = TestShow
 
 
 mpl_gui.switch_backend(TestingBackend)
