@@ -118,23 +118,28 @@ class FigureRegistry:
         self._block = block
         self.figures = []
 
+    def _register_fig(self, fig):
+        fig.canvas.mpl_connect(
+            "close_event",
+            lambda e: self.figures.remove(fig) if fig in self.figures else None,
+        )
+        self.figures.append(fig)
+        return fig
+
     @functools.wraps(figure)
     def figure(self, *args, **kwargs):
         fig = figure(*args, **kwargs)
-        self.figures.append(fig)
-        return fig
+        return self._register_fig(fig)
 
     @functools.wraps(subplots)
     def subplots(self, *args, **kwargs):
         fig, axs = subplots(*args, **kwargs)
-        self.figures.append(fig)
-        return fig, axs
+        return self._register_fig(fig), axs
 
     @functools.wraps(subplot_mosaic)
     def subplot_mosaic(self, *args, **kwargs):
         fig, axd = subplot_mosaic(*args, **kwargs)
-        self.figures.append(fig)
-        return fig, axd
+        return self._register_fig(fig), axd
 
     def show_all(self, *, block=None, timeout=None):
         """
