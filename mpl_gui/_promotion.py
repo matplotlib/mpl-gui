@@ -6,7 +6,7 @@ import itertools
 import matplotlib as mpl
 from matplotlib import is_interactive
 from matplotlib.cbook import _api
-
+from matplotlib.backend_bases import FigureCanvasBase
 from ._manage_backend import current_backend_module
 
 
@@ -73,8 +73,26 @@ def promote_figure(fig, *, auto_draw=True):
     def _destroy(event):
 
         if event.key in mpl.rcParams["keymap.quit"]:
-            # TODO add notion of 'close' to managers
-            event.canvas.manager.destroy()
+            # grab the manager off the event
+            mgr = event.canvas.manager
+            if mgr is None:
+                raise RuntimeError("Should never be here, please report a bug")
+            fig = event.canvas.figure
+            # remove this callback.  Callbacks lives on the Figure so survive
+            # the canvas being replaced.
+            old_cid = getattr(mgr, "_destroy_cid", None)
+            if old_cid is not None:
+                fig.canvas.mpl_disconnect(old_cid)
+                mgr._destroy_cid = None
+            # close the window
+            mgr.destroy()
+            # disconnect the manager from the canvas
+            fig.canvas.manager = None
+            # reset the dpi
+            fig.dpi = getattr(fig, "_original_dpi", fig.dpi)
+            # Go back to "base" canvas
+            # (this sets state on fig in the canvas init)
+            FigureCanvasBase(fig)
 
     manager._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy)
 
