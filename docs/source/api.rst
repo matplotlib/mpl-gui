@@ -49,6 +49,7 @@ Managed
    mpl_gui.FigureRegistry.figure
    mpl_gui.FigureRegistry.subplots
    mpl_gui.FigureRegistry.subplot_mosaic
+   mpl_gui.FigureRegistry.by_label
    mpl_gui.FigureRegistry.show_all
    mpl_gui.FigureRegistry.close_all
 

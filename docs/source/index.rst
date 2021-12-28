@@ -156,6 +156,19 @@ to ::
 
 and have a (mostly) drop-in replacement.
 
+Additionally, there is a  `.FigureRegistry.by_label` accessory that returns
+a dictionary mapping the Figures' labels to each Figure ::
+
+  import mpl_gui as mg
+
+  fr = mg.FigureRegistry()
+
+  figA = fr.figure(label='A')
+  figB = fr.subplots(2, 2, label='B')
+
+  fr.by_label['A'] is figA
+  fr.by_label['B'] is figB
+
 FigureContext
 +++++++++++++
 

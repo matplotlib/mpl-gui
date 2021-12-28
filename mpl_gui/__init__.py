@@ -14,6 +14,7 @@ to have smooth integration with the GUI event loop as with pyplot.
 """
 import logging
 import functools
+from itertools import count
 
 from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
 
@@ -113,18 +114,46 @@ class FigureRegistry:
 
     """
 
-    def __init__(self, *, block=None, timeout=0):
+    def __init__(self, *, block=None, timeout=0, prefix="Figure "):
+        # settings stashed to set defaults on show
         self._timeout = timeout
         self._block = block
+        # Settings / state to control the default figure label
+        self._count = count()
+        self._prefix = prefix
+        # the canonical location for storing the Figures this registry owns.
+        # any additional views must never include a figure not in the list but
+        # may omit figures
         self.figures = []
 
     def _register_fig(self, fig):
+        # if the user closes the figure by any other mechanism, drop our
+        # reference to it.  This is important for getting a "pyplot" like user
+        # experience
         fig.canvas.mpl_connect(
             "close_event",
             lambda e: self.figures.remove(fig) if fig in self.figures else None,
         )
+        # hold a hard reference to the figure.
         self.figures.append(fig)
+        # Make sure we give the figure a quasi-unique label.  We will never set
+        # the same label twice, but will not over-ride any user label (but
+        # empty string) on a Figure so if they provide duplicate labels, change
+        # the labels under us, or provide a label that will be shadowed in the
+        # future it will be what it is.
+        fignum = next(self._count)
+        if fig.get_label() == "":
+            fig.set_label(f"{self._prefix}{fignum:d}")
         return fig
+
+    @property
+    def by_label(self):
+        """
+        Return a dictionary of the current mapping labels -> figures.
+
+        If there are duplicate labels, newer figures will take precedence.
+        """
+        return {fig.get_label(): fig for fig in self.figures}
 
     @functools.wraps(figure)
     def figure(self, *args, **kwargs):

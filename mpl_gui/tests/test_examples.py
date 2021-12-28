@@ -7,7 +7,6 @@ from matplotlib.backend_bases import FigureCanvasBase
 import mpl_gui as mg
 
 
-
 def test_no_pyplot():
 
     assert sys.modules.get("matplotlib.pyplot", None) is None
@@ -79,6 +78,7 @@ def test_context_exceptions(forgiving):
 
         assert isinstance(fig.canvas, FigureCanvasBase)
 
+
 def test_close_all():
     fr = mg.FigureRegistry(block=False)
     fig = fr.figure()
@@ -90,7 +90,7 @@ def test_close_all():
     new_canvas = fig.canvas
     fr.close_all()
     assert len(fr.figures) == 0
-    assert 'destroy' in new_canvas.manager.call_info
+    assert "destroy" in new_canvas.manager.call_info
     assert fig.canvas is not new_canvas
     assert new_canvas.figure is None
 
@@ -98,3 +98,43 @@ def test_close_all():
     old_canvas = fig.canvas
     mg.show([fig])
     assert fig.canvas is not old_canvas
+
+
+def test_labels_prefix():
+    fr = mg.FigureRegistry(block=False, prefix="Aardvark ")
+    for j in range(5):
+        fr.figure()
+        assert list(fr.by_label) == [f"Aardvark {k}" for k in range(j + 1)]
+    fr.close_all()
+    assert len(fr.by_label) == 0
+
+
+def test_labels_collision():
+    fr = mg.FigureRegistry(block=False)
+    for j in range(5):
+        fr.figure(label="aardvark")
+    assert list(fr.by_label) == ["aardvark"]
+    assert len(fr.figures) == 5
+    assert len(set(fr.figures)) == 5
+    assert fr.figures[-1] is fr.by_label["aardvark"]
+    fr.close_all()
+    assert len(fr.by_label) == 0
+
+
+def test_by_label_new_dict():
+    fr = mg.FigureRegistry(block=False)
+    for j in range(5):
+        fr.figure()
+    # test we get a new dict each time!
+    assert fr.by_label is not fr.by_label
+
+
+def test_change_labels():
+    fr = mg.FigureRegistry(block=False)
+    for j in range(5):
+        fr.figure()
+    assert list(fr.by_label) == [f"Figure {j}" for j in range(5)]
+
+    for j, f in enumerate(fr.by_label.values()):
+        f.set_label(f"aardvark {j}")
+    assert list(fr.by_label) == [f"aardvark {j}" for j in range(5)]
