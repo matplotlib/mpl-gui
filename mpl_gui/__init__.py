@@ -22,7 +22,7 @@ from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
 from ._manage_backend import switch_backend, current_backend_module as _cbm
-from ._promotion import promote_figure as _promote_figure
+from ._promotion import promote_figure as promote_figure
 from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
 
 from ._version import get_versions
@@ -67,7 +67,7 @@ def show(figs, *, block=None, timeout=0):
         if fig.canvas.manager is not None:
             managers.append(fig.canvas.manager)
         else:
-            managers.append(_promote_figure(fig))
+            managers.append(promote_figure(fig))
 
     for manager in managers:
         manager.show()
