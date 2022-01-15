@@ -1,5 +1,7 @@
-API
-===
+mpl gui
+=======
+
+.. module:: mpl_gui
 
 Show
 ----
@@ -39,8 +41,20 @@ Un-managed
    mpl_gui.subplot_mosaic
 
 
+.. autosummary::
+   :toctree: _as_gen
+   :nosignatures:
+
+   mpl_gui.promote_figure
+
 Managed
 +++++++
+
+
+.. autoclass:: mpl_gui.FigureRegistry
+   :no-undoc-members:
+   :show-inheritance:
+
 
 .. autosummary::
    :toctree: _as_gen
@@ -54,13 +68,7 @@ Managed
    mpl_gui.FigureRegistry.close_all
 
 
-.. autoclass:: mpl_gui.FigureRegistry
-   :no-members:
-   :no-undoc-members:
-   :show-inheritance:
-
 .. autoclass::    mpl_gui.FigureContext
-   :no-members:
    :no-undoc-members:
    :show-inheritance:
 
