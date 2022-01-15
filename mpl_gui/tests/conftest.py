@@ -44,4 +44,4 @@ class TestingBackend(_Backend):
     Show = TestShow
 
 
-mpl_gui.switch_backend(TestingBackend)
+mpl_gui.select_gui_toolkit(TestingBackend)

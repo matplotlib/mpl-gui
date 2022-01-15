@@ -75,4 +75,4 @@ Select the backend
    :toctree: _as_gen
    :nosignatures:
 
-   mpl_gui.switch_backend
+   mpl_gui.select_gui_toolkit

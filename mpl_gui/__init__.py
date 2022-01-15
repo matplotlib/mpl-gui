@@ -21,7 +21,7 @@ from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
 from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
-from ._manage_backend import switch_backend, current_backend_module as _cbm
+from ._manage_backend import select_gui_toolkit, current_backend_module as _cbm
 from ._promotion import promote_figure as promote_figure
 from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
 
@@ -61,7 +61,7 @@ def show(figs, *, block=None, timeout=0):
     # TODO handle single figure
     if _cbm() is None:
         # set up the backend!
-        switch_backend()
+        select_gui_toolkit()
     managers = []
     for fig in figs:
         if fig.canvas.manager is not None:

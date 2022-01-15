@@ -17,11 +17,11 @@ def current_backend_module():
     return _backend_mod
 
 
-def switch_backend(newbackend=None):
+def select_gui_toolkit(newbackend=None):
     """
-    Close all open figures and set the Matplotlib backend.
+    Select the GUI toolkit to use.
 
-    The argument is case-insensitive.  Switching to an interactive backend is
+    The argument is case-insensitive.  Switching between GUI toolkits is
     possible only if no event loop for another interactive backend has started.
     Switching to and from non-interactive backends is always possible.
 
@@ -34,14 +34,13 @@ def switch_backend(newbackend=None):
     -------
     _Backend
        The backend selected.
+
     """
     global _backend_mod
 
     # work-around the sentinel resolution in Matplotlib 😱
     if newbackend is None:
         newbackend = dict.__getitem__(rcParams, "backend")
-    # make sure the init is pulled up so we can assign to it later
-    import matplotlib.backends
 
     if newbackend is rcsetup._auto_backend_sentinel:
         current_framework = cbook._get_running_interactive_framework()
@@ -67,14 +66,14 @@ def switch_backend(newbackend=None):
         # are of worse quality.
         for candidate in candidates:
             try:
-                return switch_backend(candidate)
+                return select_gui_toolkit(candidate)
             except ImportError:
                 continue
 
         else:
             # Switching to Agg should always succeed; if it doesn't, let the
             # exception propagate out.
-            return switch_backend("agg")
+            return select_gui_toolkit("agg")
 
     if isinstance(newbackend, str):
         # Backends are implemented as modules, but "inherit" default method
