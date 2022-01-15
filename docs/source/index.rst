@@ -3,8 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-mpl-gui Documentation
-=====================
+=======================
+ mpl-gui Documentation
+=======================
 
 .. toctree::
    :maxdepth: 2
@@ -14,7 +15,7 @@ mpl-gui Documentation
 
 
 Motivation
-----------
+==========
 
 This project is a prototype space for overhauling the GUI event loop management
 tools that Matplotlib provides in pyplot.
@@ -35,7 +36,7 @@ Python.
 
 
 Examples
---------
+========
 
 .. highlight:: python
 
@@ -49,8 +50,8 @@ If you want to be sure that this code does not secretly depend on pyplot run ::
 which will prevent pyplot from being imported!
 
 
-show
-++++
+showing
+-------
 
 The core of the API is `~.show` ::
 
@@ -65,31 +66,33 @@ The core of the API is `~.show` ::
 
 
 which will show both figures and block until they are closed.  As part of the
-"showing" process, the correct `
+"showing" process, the correct GUI objects will be created, put on the
+screen, and the event loop for the host GUI framework is run.
 
 
-blocking
-++++++++
+blocking (or not)
++++++++++++++++++
 
-Similar to ``plt.ion`` and ``plt.ioff``, we provide ``mg.ion()`` and
-``mg.ioff()`` which have identical semantics.  Thus :::
+Similar to `plt.ion<matplotlib.pyplot.ion>` and
+`plt.ioff<matplotlib.pyplot.ioff>`, we provide `mg.ion()<mpl_gui.ion>` and
+`mg.ioff()<mpl_gui.ioff>` which have identical semantics.  Thus  ::
 
   import mpl_gui as mg
   from matplotlib.figure import Figure
 
   mg.ion()
-
+  print(mg.is_interactive())
   fig = Figure()
 
   mg.show([fig])  # will not block
 
   mg.ioff()
-
+  print(mg.is_interactive())
   mg.show([fig])  # will block!
 
 
-As with ``plt.show``, you can explicitly control the blocking behavior of
-``mg.show`` via the *block* keyword argument ::
+As with `plt.show<matplotlib.pyplot.show>`, you can explicitly control the
+blocking behavior of `mg.show<.show>` via the *block* keyword argument ::
 
   import mpl_gui as mg
   from matplotlib.figure import Figure
@@ -100,8 +103,12 @@ As with ``plt.show``, you can explicitly control the blocking behavior of
   mg.show([fig], block=True)   # will always block
 
 
+The interactive state is shared Matplotlib and can also be controlled with
+`matplotlib.interactive` and queried via `matplotlib.is_interactive`.
+
+
 Figure and Axes Creation
-++++++++++++++++++++++++
+------------------------
 
 In analogy with `matplotlib.pyplot` we also provide `~mpl_gui.figure`,
 `~mpl_gui.subplots` and `~mpl_gui.subplot_mosaic` ::
@@ -113,14 +120,14 @@ In analogy with `matplotlib.pyplot` we also provide `~mpl_gui.figure`,
 
   mg.show([fig1, fig2, fig3])
 
-If ``mpl_gui`` is in "interactive mode",`~mpl_gui.figure`,
-`mpl_gui.subplots` and `mpl_gui.subplot_mosaic` will automatically put the new Figure in a window on the
-screen.
+If `mpl_gui` is in "interactive mode", `mpl_gui.figure`, `mpl_gui.subplots` and
+`mpl_gui.subplot_mosaic` will automatically put the new Figure in a window on
+the screen (but not run the event loop).
 
 
 
 FigureRegistry
-++++++++++++++
+--------------
 
 In the above examples it is the responsibility of the user to keep track of the
 `~matplotlib.figure.Figure` instances that are created.  If the user does not keep a hard
@@ -170,7 +177,7 @@ a dictionary mapping the Figures' labels to each Figure ::
   fr.by_label['B'] is figB
 
 FigureContext
-+++++++++++++
+-------------
 
 A very common use case is to make several figures and then show them all
 together at the end.  To facilitate this we provide a sub-class of
@@ -188,3 +195,17 @@ track of the created figures and shows them on exit ::
 This will create 3 figures and block on ``__exit__``.  The blocking
 behavior depends on ``mg.is_interacitve()`` (and follow the behavior of
 ``mg.show`` or can explicitly controlled via the *block* keyword argument).
+
+
+Selecting the GUI toolkit
+-------------------------
+
+`mpl_gui` makes use of `Matplotlib backends
+<https://matplotlib.org/stable/users/explain/backends.html>`_ for actually
+providing the GUI bindings.  Analagous to `matplotlib.use` and
+`matplotlib.pyplot.switch_backend` `mpl_gui` provides
+`mpl_gui.select_gui_toolkit` to select which GUI toolkit is used.
+`~mpl_gui.select_gui_toolkit` has the same fall-back behavior as
+`~matplotlib.pyplot` and stores its state in :rc:`backend`.  `mpl_gui` will
+consistently co-exist with `matplotlib.pyplot` managed Figures in the same
+process.
