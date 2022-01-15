@@ -3,7 +3,9 @@ import sys
 import logging
 
 from matplotlib import cbook, rcsetup
-from matplotlib import rcParamsOrig, rcParams, rcParamsDefault
+from matplotlib import rcParams, rcParamsDefault
+import matplotlib.backend_bases
+
 
 _backend_mod = None
 
@@ -12,8 +14,14 @@ _log = logging.getLogger(__name__)
 
 def current_backend_module():
     """
-    Get the currently active backend module
+    Get the currently active backend module, selecting one if needed.
+
+    Returns
+    -------
+    matplotlib.backend_bases._Backend
     """
+    if _backend_mod is None:
+        select_gui_toolkit()
     return _backend_mod
 
 

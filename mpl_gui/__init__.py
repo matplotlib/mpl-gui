@@ -59,9 +59,9 @@ def show(figs, *, block=None, timeout=0):
 
     """
     # TODO handle single figure
-    if _cbm() is None:
-        # set up the backend!
-        select_gui_toolkit()
+
+    # call this to ensure a backend is indeed selected
+    backend = _cbm()
     managers = []
     for fig in figs:
         if fig.canvas.manager is not None:
@@ -78,7 +78,7 @@ def show(figs, *, block=None, timeout=0):
 
     if block and len(managers):
         if timeout == 0:
-            _cbm().Show().mainloop()
+            backend.Show().mainloop()
         elif len(managers):
             manager, *_ = managers
             manager.canvas.start_event_loop(timeout=timeout)
