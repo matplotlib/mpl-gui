@@ -17,6 +17,7 @@ import functools
 from itertools import count
 
 from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
+from matplotlib.cbook import _setattr_cm
 
 from ._figure import Figure  # noqa: F401
 
@@ -78,7 +79,8 @@ def show(figs, *, block=None, timeout=0):
 
     if block and len(managers):
         if timeout == 0:
-            backend.Show().mainloop()
+            with _setattr_cm(backend, get_active_managers=lambda: managers):
+                backend.mainloop()
         elif len(managers):
             manager, *_ = managers
             manager.canvas.start_event_loop(timeout=timeout)
