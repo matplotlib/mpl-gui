@@ -55,7 +55,7 @@ def select_gui_toolkit(newbackend=None):
         mapping = {
             "qt": "qtagg",
             "gtk3": "gtk3agg",
-            'gtk4': 'gtk4agg',
+            "gtk4": "gtk4agg",
             "wx": "wxagg",
             "tk": "tkagg",
             "macosx": "macosx",
@@ -89,15 +89,16 @@ def select_gui_toolkit(newbackend=None):
         # creating a "class" that inherits from backend_bases._Backend and whose
         # body is filled with the module's globals.
 
-        if newbackend.lower() == 'tkagg':
-            backend_name = f'mpl_gui._patched_backends.{newbackend.lower()}'
+        if newbackend.lower() == "tkagg":
+            backend_name = f"mpl_gui._patched_backends.{newbackend.lower()}"
         else:
             backend_name = cbook._backend_module_name(newbackend)
 
         mod = importlib.import_module(backend_name)
-        if hasattr(mod, 'Backend'):
+        if hasattr(mod, "Backend"):
             backend_mod = mod.Backend
         else:
+
             class backend_mod(matplotlib.backend_bases._Backend):
                 locals().update(vars())
 
