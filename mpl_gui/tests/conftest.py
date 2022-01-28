@@ -43,5 +43,9 @@ class TestingBackend(_Backend):
     FigureManager = TestManger
     Show = TestShow
 
+    @classmethod
+    def mainloop(cls):
+        ...
+
 
 mpl_gui.select_gui_toolkit(TestingBackend)
