@@ -158,7 +158,7 @@ Thus, if you are only using this restricted set of the pyplot API then you can c
 
 to ::
 
-  import mg
+  import mpl_gui as mg
   plt = mg.FigureRegistry()
 
 and have a (mostly) drop-in replacement.
@@ -187,9 +187,9 @@ track of the created figures and shows them on exit ::
   import mpl_gui as mg
 
   with mg.FigureContext() as fc:
-     fc.subplot_mosaic('AA\nBC')
-     fc.figure()
-     fc.subplots(2, 2)
+      fc.subplot_mosaic('AA\nBC')
+      fc.figure()
+      fc.subplots(2, 2)
 
 
 This will create 3 figures and block on ``__exit__``.  The blocking
