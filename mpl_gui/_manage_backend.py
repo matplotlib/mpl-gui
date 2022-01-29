@@ -98,9 +98,12 @@ def select_gui_toolkit(newbackend=None):
         if hasattr(mod, "Backend"):
             backend_mod = mod.Backend
         else:
-
             class backend_mod(matplotlib.backend_bases._Backend):
-                locals().update(vars())
+                locals().update(vars(mod))
+
+                @classmethod
+                def mainloop(cls):
+                    return mod.Show().mainloop()
 
         rc_params_string = newbackend
 
