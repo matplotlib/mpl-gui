@@ -17,12 +17,12 @@ import functools
 from itertools import count
 
 from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
-from matplotlib.cbook import _setattr_cm
 
 from ._figure import Figure  # noqa: F401
 
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
-from ._manage_backend import select_gui_toolkit, current_backend_module as _cbm
+from ._manage_backend import select_gui_toolkit  # noqa: F401
+from ._manage_backend import current_backend_module as _cbm
 from ._promotion import promote_figure as promote_figure
 from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
 
@@ -70,17 +70,12 @@ def show(figs, *, block=None, timeout=0):
         else:
             managers.append(promote_figure(fig))
 
-    for manager in managers:
-        manager.show()
-        manager.canvas.draw_idle()
-
     if block is None:
         block = not is_interactive()
 
     if block and len(managers):
         if timeout == 0:
-            with _setattr_cm(backend, get_active_managers=lambda: managers):
-                backend.mainloop()
+            backend.show_managers(managers=managers, block=block)
         elif len(managers):
             manager, *_ = managers
             manager.canvas.start_event_loop(timeout=timeout)

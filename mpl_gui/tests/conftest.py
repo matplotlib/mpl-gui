@@ -22,6 +22,8 @@ class TestCanvas(FigureCanvasBase):
 
 
 class TestManger(FigureManagerBase):
+    _active_managers = None
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.call_info = {}
@@ -46,6 +48,11 @@ class TestingBackend(_Backend):
     @classmethod
     def mainloop(cls):
         ...
+
+    @classmethod
+    def show_managers(cls, *, managers, block):
+        for m in managers:
+            m.show()
 
 
 mpl_gui.select_gui_toolkit(TestingBackend)

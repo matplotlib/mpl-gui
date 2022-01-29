@@ -1,6 +1,7 @@
 import importlib
 import sys
 import logging
+import types
 
 from matplotlib import cbook, rcsetup
 from matplotlib import rcParams, rcParamsDefault
@@ -96,24 +97,48 @@ def select_gui_toolkit(newbackend=None):
 
         mod = importlib.import_module(backend_name)
         if hasattr(mod, "Backend"):
-            backend_mod = mod.Backend
+            orig_class = mod.Backend
+
         else:
-            class backend_mod(matplotlib.backend_bases._Backend):
+
+            class orig_class(matplotlib.backend_bases._Backend):
                 locals().update(vars(mod))
 
                 @classmethod
                 def mainloop(cls):
                     return mod.Show().mainloop()
 
+        class BackendClass(orig_class):
+            @classmethod
+            def show_managers(cls, *, managers, block):
+                if not managers:
+                    return
+                for manager in managers:
+                    manager.show()  # Emits a warning for non-interactive backend
+                    manager.canvas.draw_idle()
+                if cls.mainloop is None:
+                    return
+                if block:
+                    try:
+                        cls.FigureManager._active_managers = managers
+                        cls.mainloop()
+                    finally:
+                        cls.FigureManager._active_managers = None
+
+        if not hasattr(BackendClass.FigureManager, "_active_managers"):
+            BackendClass.FigureManager._active_managers = None
         rc_params_string = newbackend
 
     else:
-        backend_mod = newbackend
-        rc_params_string = f"module://_backend_mod_{id(backend_mod)}"
-        sys.modules[rc_params_string] = backend_mod
+        BackendClass = newbackend
+        mod_name = f"_backend_mod_{id(BackendClass)}"
+        rc_params_string = f"module://{mod_name}"
+        mod = types.ModuleType(mod_name)
+        mod.Backend = BackendClass
+        sys.modules[mod_name] = mod
 
     required_framework = getattr(
-        backend_mod.FigureCanvas, "required_interactive_framework", None
+        BackendClass.FigureCanvas, "required_interactive_framework", None
     )
     if required_framework is not None:
         current_framework = cbook._get_running_interactive_framework()
@@ -129,10 +154,11 @@ def select_gui_toolkit(newbackend=None):
                 )
             )
 
-    _log.debug("Loaded backend %s version %s.", newbackend, backend_mod.backend_version)
+    _log.debug(
+        "Loaded backend %s version %s.", newbackend, BackendClass.backend_version
+    )
 
     rcParams["backend"] = rcParamsDefault["backend"] = rc_params_string
-    _backend_mod = backend_mod
 
     # is IPython imported?
     mod_ipython = sys.modules.get("IPython")
@@ -141,4 +167,7 @@ def select_gui_toolkit(newbackend=None):
         ip = mod_ipython.get_ipython()
         if ip:
             ip.enable_gui(required_framework)
-    return _backend_mod
+
+    # remember to set the global variable
+    _backend_mod = BackendClass
+    return BackendClass
