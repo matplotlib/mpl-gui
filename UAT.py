@@ -1,14 +1,30 @@
+import argparse
 import sys
 
 import matplotlib as mpl
 import mpl_gui as mg
 from matplotlib.figure import Figure
 
+# ensure no pyplot!
 assert sys.modules.get("matplotlib.pyplot", None) is None
 sys.modules["matplotlib.pyplot"] = None
 
+parser = argparse.ArgumentParser(
+    description="User Acceptance Tests for mpl-gui.",
+    epilog=(
+        "This script runs through several scenarios and prints out prompts explaining the expected behavior.  "
+        "The figures will need to be closed to continue the script.  "
+    ),
+)
+parser.add_argument(
+    "backend",
+    type=str,
+    help="The backend to use.  Can be anything that `mpl.use` accepts",
+)
 
-_, target = sys.argv
+args = parser.parse_args()
+target = args.backend
+
 
 # this is how to force the right Qt binding
 if target.lower().startswith("qt5"):
