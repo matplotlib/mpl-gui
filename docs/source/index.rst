@@ -11,6 +11,7 @@
    :maxdepth: 2
 
    api
+   release_history
    min_versions
 
 
