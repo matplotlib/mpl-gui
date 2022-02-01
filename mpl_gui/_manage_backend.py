@@ -68,7 +68,7 @@ def select_gui_toolkit(newbackend=None):
             candidates = [best_guess]
         else:
             candidates = []
-        candidates += ["macosx", "qt5agg", "gtk3agg", "tkagg", "wxagg"]
+        candidates += ["macosx", "qtagg", "gtk3agg", "tkagg", "wxagg"]
 
         # Don't try to fallback on the cairo-based backends as they each have
         # an additional dependency (pycairo) over the agg-based backend, and
