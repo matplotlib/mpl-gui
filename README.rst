@@ -9,7 +9,7 @@ mpl-gui
 Prototype project for splitting pyplot in half
 
 * Free software: 3-clause BSD license
-* Documentation: https://tacaswell.github.io/mpl-gui.
+* Documentation: https://matplotlib.github.io/mpl-gui.
 
 Motivation
 ----------

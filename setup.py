@@ -41,7 +41,7 @@ setup(
     long_description=readme,
     author="Thomas A Caswell",
     author_email='tcaswell@gmail.com',
-    url='https://github.com/tacaswell/mpl-gui',
+    url='https://github.com/matplotlib/mpl-gui',
     python_requires='>={}'.format('.'.join(str(n) for n in min_version)),
     packages=find_packages(exclude=['docs', 'tests']),
     entry_points={
