@@ -61,33 +61,41 @@ Ready to contribute? Here's how to set up `mpl-gui` for local development.
 
     $ git clone git@github.com:your_name_here/mpl-gui.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Install your local copy into a virtualenv.  Using the standard-libary `venv`, see
+   [the Python documentation](https://docs.python.org/3/tutorial/venv.html#creating-virtual-environments) for details ::
 
-    $ mkvirtualenv mpl-gui
+    $ python -m venv mpl-gui-dev
+    $ source mpl-gui-dev/activate       # unix
+    $ mpl-gui-dev\Scripts\activate.bat  # windows
+
+   or other virtual environment tool (e.g. conda, canopy) of choice.
+
+4. Install the development dependencies ::
+
     $ cd mpl-gui/
-    $ python setup.py develop
+    $ pip install -r requirements-dev.txt
+    $ pip install -v --no-build-isolation .
 
-4. Create a branch for local development::
+5. Create a branch for local development::
 
     $ git checkout -b name-of-your-bugfix-or-feature
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
+6. When you're done making changes, check that your changes pass flake8 and the tests::
 
     $ flake8 mpl_gui tests
-    $ python setup.py test
-    $ tox
+    $ pytest
 
-   To get flake8 and tox, just pip install them into your virtualenv.
+   To get flake8 and pytest, pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+8. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 -----------------------
@@ -98,7 +106,4 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 2.7, 3.3, 3.4, 3.5 and for PyPy. Check
-   https://travis-ci.org/tacaswell/mpl-gui/pull_requests
-   and make sure that the tests pass for all supported Python versions.
-
+3. The pull request should work for Python 3.7 and up.
