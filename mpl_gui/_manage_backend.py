@@ -166,6 +166,9 @@ def select_gui_toolkit(newbackend=None):
         # if so are we in an IPython session
         ip = mod_ipython.get_ipython()
         if ip:
+            # macosx -> osx mapping for the osx backend in ipython
+            if required_framework == "macosx":
+                required_framework = "osx"
             ip.enable_gui(required_framework)
 
     # remember to set the global variable
