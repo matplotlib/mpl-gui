@@ -89,7 +89,7 @@ Ready to contribute? Here's how to set up `mpl-gui` for local development.
 
    To get flake8 and pytest, pip install them into your virtualenv.
 
-8. Commit your changes and push your branch to GitHub::
+7. Commit your changes and push your branch to GitHub::
 
     $ git add .
     $ git commit -m "Your detailed description of your changes."
