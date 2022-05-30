@@ -12,15 +12,6 @@ import sys
 sys.modules["matplotlib.pyplot"] = None
 
 
-class TestCanvas(FigureCanvasBase):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.call_info = {}
-
-    def start_event_loop(self, timeout=0):
-        self.call_info["start_event_loop"] = {"timeout": timeout}
-
-
 class TestManger(FigureManagerBase):
     _active_managers = None
 
@@ -33,6 +24,17 @@ class TestManger(FigureManagerBase):
 
     def destroy(self):
         self.call_info["destroy"] = {}
+
+
+class TestCanvas(FigureCanvasBase):
+    manager_class = TestManger
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.call_info = {}
+
+    def start_event_loop(self, timeout=0):
+        self.call_info["start_event_loop"] = {"timeout": timeout}
 
 
 class TestShow(ShowBase):
