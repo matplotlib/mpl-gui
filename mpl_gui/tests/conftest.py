@@ -7,9 +7,19 @@ from matplotlib.backend_bases import (
 import mpl_gui
 import sys
 
+def pytest_configure(config):
+    # config is initialized here rather than in pytest.ini so that `pytest
+    # --pyargs matplotlib` (which would not find pytest.ini) works.  The only
+    # entries in pytest.ini set minversion (which is checked earlier),
+    # testpaths/python_files, as they are required to properly find the tests
+    for key, value in [
+        ("filterwarnings", "error"),
+    ]:
+        config.addinivalue_line(key, value)
 
-# make sure we do not sneakily get pyplot
-sys.modules["matplotlib.pyplot"] = None
+    # make sure we do not sneakily get pyplot
+    assert sys.modules.get("matplotlib.pyplot") is None
+    sys.modules["matplotlib.pyplot"] = None
 
 
 class TestManger(FigureManagerBase):

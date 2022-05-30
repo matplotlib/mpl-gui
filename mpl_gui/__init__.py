@@ -12,9 +12,11 @@ This will enable users to both only use the explicit API (nee OO interface) and
 to have smooth integration with the GUI event loop as with pyplot.
 
 """
-import logging
-import functools
+from collections import Counter
 from itertools import count
+import functools
+import logging
+import warnings
 
 from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
 
@@ -141,6 +143,8 @@ class FigureRegistry:
         fignum = next(self._count)
         if fig.get_label() == "":
             fig.set_label(f"{self._prefix}{fignum:d}")
+        # TODO: is there a better way to track this than monkey patching?
+        fig._mpl_gui_fignum = fignum
         return fig
 
     @property
@@ -150,7 +154,27 @@ class FigureRegistry:
 
         If there are duplicate labels, newer figures will take precedence.
         """
-        return {fig.get_label(): fig for fig in self.figures}
+        mapping = {fig.get_label(): fig for fig in self.figures}
+        if len(mapping) != len(self.figures):
+            counts = Counter(fig.get_label() for fig in self.figures)
+            multiples = {k: v for k, v in counts.items() if v > 1}
+            warnings.warn(
+                (
+                    f"There are repeated labels ({multiples!r}), but only the newest figure with that label can "
+                    "be returned. "
+                ),
+                stacklevel=2,
+            )
+        return mapping
+
+    @property
+    def by_number(self):
+        """
+        Return a dictionary of the current mapping number -> figures.
+
+        """
+        self._ensure_all_figures_promoted()
+        return {fig.canvas.manager.num: fig for fig in self.figures}
 
     @functools.wraps(figure)
     def figure(self, *args, **kwargs):
@@ -166,6 +190,11 @@ class FigureRegistry:
     def subplot_mosaic(self, *args, **kwargs):
         fig, axd = subplot_mosaic(*args, **kwargs)
         return self._register_fig(fig), axd
+
+    def _ensure_all_figures_promoted(self):
+        for f in self.figures:
+            if f.canvas.manager is None:
+                promote_figure(f, num=f._mpl_gui_fignum)
 
     def show_all(self, *, block=None, timeout=None):
         """
@@ -198,7 +227,7 @@ class FigureRegistry:
 
         if timeout is None:
             timeout = self._timeout
-
+        self._ensure_all_figures_promoted()
         show(self.figures, block=self._block, timeout=self._timeout)
 
     # alias to easy pyplot compatibility
@@ -219,20 +248,63 @@ class FigureRegistry:
         passing it to `show`.
 
         """
-        for fig in self.figures:
-            if fig.canvas.manager is not None:
-                fig.canvas.manager.destroy()
+        for fig in list(self.figures):
+            self.close(fig)
+
+    def close(self, val):
+        """
+        Close (meaning destroy the UI) and forget a managed Figure.
+
+        This will do two things:
+
+        - start the destruction process of an UI (the event loop may need to
+          run to complete this process and if the user is holding hard
+          references to any of the UI elements they may remain alive).
+        - Remove the `Figure` from this Registry.
+
+        We will no longer have any hard references to the Figure, but if
+        the user does the `Figure` (and its components) will not be garbage
+        collected.  Due to the circular references in Matplotlib these
+        objects may not be collected until the full cyclic garbage collection
+        runs.
+
+        If the user still has a reference to the `Figure` they can re-show the
+        figure via `show`, but the `FigureRegistry` will not be aware of it.
+
+        Parameters
+        ----------
+        val : 'all' or int or str or Figure
+
+            - The special case of 'all' closes all open Figures
+            - If any other string is passed, it is interpreted as a key in
+              `by_label` and that Figure is closed
+            - If an integer it is interpreted as a key in `by_number` and that
+              Figure is closed
+            - If it is a `Figure` instance, then that figure is closed
+
+        """
+        if val == "all":
+            return self.close_all()
+        # or do we want to close _all_ of the figures with a given label / number?
+        if isinstance(val, str):
+            fig = self.by_label[val]
+        elif isinstance(val, int):
+            fig = self.by_number[val]
+        else:
+            fig = val
+            if fig not in self.figures:
+                raise ValueError(
+                    "Trying to close a figure not associated with this Registry."
+                )
+        if fig.canvas.manager is not None:
+            fig.canvas.manager.destroy()
             # disconnect figure from canvas
             fig.canvas.figure = None
             # disconnect canvas from figure
             _FigureCanvasBase(figure=fig)
-        self.figures.clear()
-
-    def close(self, val):
-        if val != "all":
-            # TODO close figures 1 at a time
-            raise RuntimeError("can only close them all")
-        self.close_all()
+        assert fig.canvas.manager is None
+        if fig in self.figures:
+            self.figures.remove(fig)
 
 
 class FigureContext(FigureRegistry):

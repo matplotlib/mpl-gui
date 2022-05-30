@@ -37,7 +37,7 @@ def _auto_draw_if_interactive(fig, val):
             fig.canvas.draw_idle()
 
 
-def promote_figure(fig, *, auto_draw=True):
+def promote_figure(fig, *, auto_draw=True, num=None):
     """Create a new figure manager instance."""
     _backend_mod = current_backend_module()
 
@@ -57,7 +57,10 @@ def promote_figure(fig, *, auto_draw=True):
             return fig.canvas.manager
     # TODO: do we want to make sure we poison / destroy / decouple the existing
     # canavs?
-    manager = _backend_mod.new_figure_manager_given_figure(next(_figure_count), fig)
+    next_num = next(_figure_count)
+    manager = _backend_mod.new_figure_manager_given_figure(
+        num if num is not None else next_num, fig
+    )
     if fig.get_label():
         manager.set_window_title(fig.get_label())
 

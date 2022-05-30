@@ -113,10 +113,12 @@ def test_labels_collision():
     fr = mg.FigureRegistry(block=False)
     for j in range(5):
         fr.figure(label="aardvark")
-    assert list(fr.by_label) == ["aardvark"]
+    with pytest.warns(UserWarning, match="{'aardvark': 5}"):
+        assert list(fr.by_label) == ["aardvark"]
     assert len(fr.figures) == 5
     assert len(set(fr.figures)) == 5
-    assert fr.figures[-1] is fr.by_label["aardvark"]
+    with pytest.warns(UserWarning, match="{'aardvark': 5}"):
+        assert fr.figures[-1] is fr.by_label["aardvark"]
     fr.close_all()
     assert len(fr.by_label) == 0
 
@@ -138,3 +140,29 @@ def test_change_labels():
     for j, f in enumerate(fr.by_label.values()):
         f.set_label(f"aardvark {j}")
     assert list(fr.by_label) == [f"aardvark {j}" for j in range(5)]
+
+
+def test_close_one_at_a_time():
+    fr = mg.FigureRegistry(block=False)
+    fig1 = fr.figure(label='a')
+    fig2 = fr.figure(label='b')
+    fig3 = fr.figure(label='c')
+    fr.figure(label='d')
+    assert len(fr.figures) == 4
+
+    fr.close(fig1)
+    assert len(fr.figures) == 3
+    assert fig1 not in fr.figures
+
+    fr.close(fig2.get_label())
+    assert len(fr.figures) == 2
+    assert fig2 not in fr.figures
+
+    fr.show()
+
+    fr.close(fig3.canvas.manager.num)
+    assert len(fr.figures) == 1
+    assert fig3 not in fr.figures
+
+    fr.close('all')
+    assert len(fr.figures) == 0
