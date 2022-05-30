@@ -1,0 +1,6 @@
+﻿mpl\_gui.select\_gui\_toolkit
+=============================
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: select_gui_toolkit

@@ -1,0 +1,6 @@
+﻿mpl\_gui.FigureRegistry.close\_all
+==================================
+
+.. currentmodule:: mpl_gui
+
+.. automethod:: FigureRegistry.close_all
