@@ -124,8 +124,12 @@ nitpicky = True
 html_theme = "mpl_sphinx_theme"
 
 html_theme_options = {
-    "native_site": False,
-    "logo_link": "index",
+    "navbar_links": "server-stable",
+    "logo": {
+        "link": "index",
+        "image_light": "images/logo2.svg",
+        "image_dark": "images/logo_dark.svg",
+    },
     # collapse_navigation in pydata-sphinx-theme is slow, so skipped for local
     # and CI builds https://github.com/pydata/pydata-sphinx-theme/pull/386
     "collapse_navigation": not is_release_build,
@@ -156,7 +160,6 @@ html_static_path = ["_static"]
 html_sidebars = {
     "**": [
         "relations.html",  # needs 'show_related': True theme option to display
-        "searchbox.html",
     ]
 }
 
