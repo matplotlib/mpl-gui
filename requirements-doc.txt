@@ -2,7 +2,7 @@
 ipython
 jinja2>3
 matplotlib
-mpl-sphinx-theme~=3.6.0
+mpl-sphinx-theme~=3.7.1
 numpydoc
 sphinx
 sphinx-copybutton
