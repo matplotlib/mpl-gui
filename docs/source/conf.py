@@ -124,12 +124,7 @@ nitpicky = True
 html_theme = "mpl_sphinx_theme"
 
 html_theme_options = {
-    "navbar_links": "server-stable",
-    "logo": {
-        "link": "index",
-        "image_light": "images/logo2.svg",
-        "image_dark": "images/logo_dark.svg",
-    },
+    "navbar_links": ("absolute", "server-stable"),
     # collapse_navigation in pydata-sphinx-theme is slow, so skipped for local
     # and CI builds https://github.com/pydata/pydata-sphinx-theme/pull/386
     "collapse_navigation": not is_release_build,
