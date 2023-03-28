@@ -2,6 +2,9 @@ name: Docs
 
 on: [push, pull_request]
 
+env:
+  IS_RELEASE: |
+    ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
 jobs:
   build:
@@ -14,9 +17,14 @@ jobs:
       - name: Install mpl-gui
         run: python -m pip install -v .
       - name: Build
-        run: make -Cdocs html
+        run: |
+          if [ "x${IS_RELEASE}" == "xtrue" ]; then
+            O="-t release"
+          fi
+          make -Cdocs html O="$O"
+
       - name: Publish
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        if: ${{ env.IS_RELEASE == 'true' }}
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
