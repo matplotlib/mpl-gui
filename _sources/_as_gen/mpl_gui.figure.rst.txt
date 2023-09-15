@@ -1,0 +1,6 @@
+﻿mpl\_gui.figure
+===============
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: figure

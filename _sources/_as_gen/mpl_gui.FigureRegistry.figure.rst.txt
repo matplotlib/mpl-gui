@@ -1,0 +1,6 @@
+﻿mpl\_gui.FigureRegistry.figure
+==============================
+
+.. currentmodule:: mpl_gui
+
+.. automethod:: FigureRegistry.figure

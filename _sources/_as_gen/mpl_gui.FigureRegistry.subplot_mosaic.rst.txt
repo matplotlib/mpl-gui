@@ -1,0 +1,6 @@
+﻿mpl\_gui.FigureRegistry.subplot\_mosaic
+=======================================
+
+.. currentmodule:: mpl_gui
+
+.. automethod:: FigureRegistry.subplot_mosaic

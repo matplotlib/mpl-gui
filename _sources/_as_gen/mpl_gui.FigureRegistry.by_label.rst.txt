@@ -1,0 +1,6 @@
+﻿mpl\_gui.FigureRegistry.by\_label
+=================================
+
+.. currentmodule:: mpl_gui
+
+.. autoproperty:: FigureRegistry.by_label

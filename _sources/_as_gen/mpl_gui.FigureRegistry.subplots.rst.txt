@@ -1,0 +1,6 @@
+﻿mpl\_gui.FigureRegistry.subplots
+================================
+
+.. currentmodule:: mpl_gui
+
+.. automethod:: FigureRegistry.subplots

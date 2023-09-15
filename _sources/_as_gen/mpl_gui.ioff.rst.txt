@@ -1,0 +1,6 @@
+﻿mpl\_gui.ioff
+=============
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: ioff

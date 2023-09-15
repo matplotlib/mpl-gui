@@ -1,0 +1,6 @@
+﻿mpl\_gui.ion
+============
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: ion

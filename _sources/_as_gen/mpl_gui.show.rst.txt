@@ -1,0 +1,6 @@
+﻿mpl\_gui.show
+=============
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: show

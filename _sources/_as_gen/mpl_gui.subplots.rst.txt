@@ -1,0 +1,6 @@
+﻿mpl\_gui.subplots
+=================
+
+.. currentmodule:: mpl_gui
+
+.. autofunction:: subplots
