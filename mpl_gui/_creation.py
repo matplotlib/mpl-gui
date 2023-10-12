@@ -1,9 +1,6 @@
 """Helpers to create new Figures."""
 
-from matplotlib import is_interactive
-
 from ._figure import Figure
-from ._promotion import promote_figure
 
 
 def figure(
@@ -15,8 +12,6 @@ def figure(
     edgecolor=None,  # defaults to rc figure.edgecolor
     frameon=True,
     FigureClass=Figure,
-    clear=False,
-    auto_draw=True,
     **kwargs,
 ):
     """
@@ -75,8 +70,6 @@ def figure(
         frameon=frameon,
         **kwargs,
     )
-    if is_interactive():
-        promote_figure(fig, auto_draw=auto_draw)
     return fig
 
 
@@ -215,10 +208,6 @@ def subplots(
 
         # Note that this is the same as
         plt.subplots(2, 2, sharex=True, sharey=True)
-
-        # Create figure number 10 with a single subplot
-        # and clears it if it already exists.
-        fig, ax = plt.subplots(num=10, clear=True)
 
     """
     fig = figure(**fig_kw)
