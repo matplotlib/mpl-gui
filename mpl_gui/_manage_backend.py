@@ -79,10 +79,9 @@ def select_gui_toolkit(newbackend=None):
             except ImportError:
                 continue
 
-        else:
-            # Switching to Agg should always succeed; if it doesn't, let the
-            # exception propagate out.
-            return select_gui_toolkit("agg")
+        # Switching to Agg should always succeed; if it doesn't, let the
+        # exception propagate out.
+        return select_gui_toolkit("agg")
 
     if isinstance(newbackend, str):
         # Backends are implemented as modules, but "inherit" default method
