@@ -306,7 +306,8 @@ class FigureRegistry:
 
         """
         if val == "all":
-            return self.close_all()
+            self.close_all()
+            return
         # or do we want to close _all_ of the figures with a given label / number?
         if isinstance(val, str):
             fig = self.by_label[val]
