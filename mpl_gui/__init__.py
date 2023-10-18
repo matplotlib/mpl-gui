@@ -250,7 +250,7 @@ class FigureRegistry:
         if timeout is None:
             timeout = self._timeout
         self._ensure_all_figures_promoted()
-        display(*self.figures, block=self._block, timeout=self._timeout)
+        display(*self.figures, block=self._block, timeout=timeout)
 
     # alias to easy pyplot compatibility
     show = show_all
@@ -327,6 +327,7 @@ class FigureRegistry:
             _FigureCanvasBase(figure=fig)
         assert fig.canvas.manager is None
         self._fig_to_number.pop(fig, None)
+        return
 
 
 class FigureContext(FigureRegistry):
