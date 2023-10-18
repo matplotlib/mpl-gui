@@ -235,7 +235,7 @@ class FigureRegistry:
         if timeout is None:
             timeout = self._timeout
         self._ensure_all_figures_promoted()
-        show(self.figures, block=self._block, timeout=self._timeout)
+        show(self.figures, block=self._block, timeout=timeout)
 
     # alias to easy pyplot compatibility
     show = show_all
@@ -291,7 +291,8 @@ class FigureRegistry:
 
         """
         if val == "all":
-            return self.close_all()
+            self.close_all()
+            return
         # or do we want to close _all_ of the figures with a given label / number?
         if isinstance(val, str):
             fig = self.by_label[val]
@@ -311,6 +312,7 @@ class FigureRegistry:
             _FigureCanvasBase(figure=fig)
         assert fig.canvas.manager is None
         self._fig_to_number.pop(fig, None)
+        return
 
 
 class FigureContext(FigureRegistry):
