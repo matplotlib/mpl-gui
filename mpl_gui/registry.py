@@ -1,8 +1,11 @@
 """Reproduces the module-level pyplot UX for Figure management."""
 
 from . import FigureRegistry as _FigureRegistry
-from ._manage_backend import select_gui_toolkit
-from ._manage_interactive import ion, ioff, is_interactive
+from ._manage_interactive import (
+    ion as ion,
+    ioff as ioff,
+    is_interactive as is_interactive,
+)
 
 _fr = _FigureRegistry()
 
@@ -32,7 +35,6 @@ def get_fignums():
 # if one must.  `from foo import *` is a language miss-feature, but provide
 # sensible behavior anyway.
 __all__ = _fr_exports + [
-    "select_gui_toolkit",
     "ion",
     "ioff",
     "is_interactive",
