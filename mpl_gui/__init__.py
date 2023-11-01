@@ -22,8 +22,12 @@ from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
 
 from ._figure import Figure  # noqa: F401
 
-from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
-from ._manage_backend import select_gui_toolkit  # noqa: F401
+from ._manage_interactive import (  # noqa: F401
+    ion as ion,
+    ioff as ioff,
+    is_interactive as is_interactive,
+)
+from ._manage_backend import select_gui_toolkit as select_gui_toolkit  # noqa: F401
 from ._manage_backend import current_backend_module as _cbm
 from ._promotion import promote_figure as _promote_figure
 from ._creation import (
