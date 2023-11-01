@@ -18,12 +18,6 @@ def test_promotion():
     assert fig.canvas.manager is not None
 
 
-def test_smoke_test_creation():
-    mg.figure()
-    mg.subplots()
-    mg.subplot_mosaic("A\nB")
-
-
 def test_smoke_test_context():
     with mg.FigureContext(block=False) as fc:
         fc.figure()
@@ -34,7 +28,8 @@ def test_smoke_test_context():
 def test_ion():
     with mg.ion():
         assert mg.is_interactive()
-        fig, ax = mg.subplots()
+        fig = mg.Figure()
+        ax = fig.subplots()
         (ln,) = ax.plot(range(5))
         ln.set_color("k")
         mg.show([fig], timeout=1)
