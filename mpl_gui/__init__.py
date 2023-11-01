@@ -279,16 +279,16 @@ class FigureRegistry:
         - start the destruction process of an UI (the event loop may need to
           run to complete this process and if the user is holding hard
           references to any of the UI elements they may remain alive).
-        - Remove the `Figure` from this Registry.
+        - Remove the `~matplotlib.figure.Figure` from this Registry.
 
         We will no longer have any hard references to the Figure, but if
-        the user does the `Figure` (and its components) will not be garbage
+        the user does the `~matplotlib.figure.Figure` (and its components) will not be garbage
         collected.  Due to the circular references in Matplotlib these
         objects may not be collected until the full cyclic garbage collection
         runs.
 
-        If the user still has a reference to the `Figure` they can re-show the
-        figure via `show`, but the `FigureRegistry` will not be aware of it.
+        If the user still has a reference to the `~matplotlib.figure.Figure` they can re-show the
+        figure via `show`, but the `.FigureRegistry` will not be aware of it.
 
         Parameters
         ----------
@@ -297,9 +297,9 @@ class FigureRegistry:
             - The special case of 'all' closes all open Figures
             - If any other string is passed, it is interpreted as a key in
               `by_label` and that Figure is closed
-            - If an integer it is interpreted as a key in `by_number` and that
+            - If an integer it is interpreted as a key in `.FigureRegistry.by_number` and that
               Figure is closed
-            - If it is a `Figure` instance, then that figure is closed
+            - If it is a `~matplotlib.figure.Figure` instance, then that figure is closed
 
         """
         if val == "all":
