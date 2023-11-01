@@ -65,6 +65,9 @@ def show(figs, *, block=None, timeout=0):
         Defaults to True in non-interactive mode and to False in interactive
         mode (see `.is_interactive`).
 
+    timeout : float, optional
+        How long to run the event loop in msec if blocking.
+
     """
     # TODO handle single figure
 
