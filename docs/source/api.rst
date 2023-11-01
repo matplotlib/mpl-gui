@@ -15,15 +15,15 @@ Select the backend
    mpl_gui.select_gui_toolkit
 
 
-Show
-----
+Display
+-------
 
 .. autosummary::
    :toctree: _as_gen
    :nosignatures:
 
 
-   mpl_gui.show
+   mpl_gui.display
 
 
 Interactivity

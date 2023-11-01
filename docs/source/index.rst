@@ -143,8 +143,8 @@ track of the created figures and shows them on exit ::
 
 
 This will create 3 figures and block on ``__exit__``.  The blocking
-behavior depends on ``mg.is_interacitve()`` (and follow the behavior of
-``mg.show`` or can explicitly controlled via the *block* keyword argument).
+behavior depends on `~mpl_gui.is_interactive()` (and follow the behavior of
+`.display` and `.FigureRegistry.show` can explicitly controlled via the *block* keyword argument).
 
 The `.registry` module is implemented by having a singleton `.FigureRegistry`
 at the module level.
@@ -164,7 +164,7 @@ explicitly available ::
 
   fig2 = Figure()
 
-  mg.show(fig1, fig2)
+  mg.display(fig1, fig2)
 
 
 which will show both figures and block until they are closed.  As part of the
@@ -182,23 +182,23 @@ Similar to `plt.ion<matplotlib.pyplot.ion>` and
   print(mg.is_interactive())
   fig = Figure()
 
-  mg.show([fig])  # will not block
+  mg.display([fig])  # will not block
 
   mg.ioff()
   print(mg.is_interactive())
-  mg.show(fig)  # will block!
+  mg.display(fig)  # will block!
 
 
 As with `plt.show<matplotlib.pyplot.show>`, you can explicitly control the
-blocking behavior of `mg.show<mpl_gui.show>` via the *block* keyword argument ::
+blocking behavior of `mg.display<mpl_gui.display>` via the *block* keyword argument ::
 
   import mpl_gui as mg
   from matplotlib.figure import Figure
 
   fig = Figure(label='control blocking')
 
-  mg.show(fig, block=False)  # will never block
-  mg.show(fig, block=True)   # will always block
+  mg.display(fig, block=False)  # will never block
+  mg.display(fig, block=True)   # will always block
 
 
 The interactive state is shared Matplotlib and can also be controlled with

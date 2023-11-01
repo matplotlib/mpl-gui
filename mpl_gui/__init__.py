@@ -46,7 +46,7 @@ del get_versions
 _log = logging.getLogger(__name__)
 
 
-def show(*figs, block=None, timeout=0):
+def display(*figs, block=None, timeout=0):
     """
     Show the figures and maybe block.
 
@@ -247,7 +247,7 @@ class FigureRegistry:
         if timeout is None:
             timeout = self._timeout
         self._ensure_all_figures_promoted()
-        show(*self.figures, block=self._block, timeout=self._timeout)
+        display(*self.figures, block=self._block, timeout=self._timeout)
 
     # alias to easy pyplot compatibility
     show = show_all
@@ -264,7 +264,7 @@ class FigureRegistry:
         4. drops its hard reference to the Figure
 
         If the user still holds a reference to the Figure it can be revived by
-        passing it to `mpl_gui.show`.
+        passing it to `mpl_gui.display`.
 
         """
         for fig in list(self.figures):
@@ -368,7 +368,7 @@ class FigureContext(FigureRegistry):
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value is not None and not self._forgive_failure:
             return
-        show(*self.figures, block=self._block, timeout=self._timeout)
+        display(*self.figures, block=self._block, timeout=self._timeout)
 
 
 # from mpl_gui import * # is a langauge miss-feature
