@@ -46,13 +46,13 @@ del get_versions
 _log = logging.getLogger(__name__)
 
 
-def show(figs, *, block=None, timeout=0):
+def show(*figs, block=None, timeout=0):
     """
     Show the figures and maybe block.
 
     Parameters
     ----------
-    figs : List[Figure]
+    *figs : Figure
         The figures to show.  If they do not currently have a GUI aware
         canvas + manager attached they will be promoted.
 
@@ -247,7 +247,7 @@ class FigureRegistry:
         if timeout is None:
             timeout = self._timeout
         self._ensure_all_figures_promoted()
-        show(self.figures, block=self._block, timeout=self._timeout)
+        show(*self.figures, block=self._block, timeout=self._timeout)
 
     # alias to easy pyplot compatibility
     show = show_all
@@ -368,7 +368,7 @@ class FigureContext(FigureRegistry):
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value is not None and not self._forgive_failure:
             return
-        show(self.figures, block=self._block, timeout=self._timeout)
+        show(*self.figures, block=self._block, timeout=self._timeout)
 
 
 # from mpl_gui import * # is a langauge miss-feature

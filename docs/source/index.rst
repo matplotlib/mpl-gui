@@ -164,7 +164,7 @@ explicitly available ::
 
   fig2 = Figure()
 
-  mg.show([fig1, fig2])
+  mg.show(fig1, fig2)
 
 
 which will show both figures and block until they are closed.  As part of the
@@ -186,7 +186,7 @@ Similar to `plt.ion<matplotlib.pyplot.ion>` and
 
   mg.ioff()
   print(mg.is_interactive())
-  mg.show([fig])  # will block!
+  mg.show(fig)  # will block!
 
 
 As with `plt.show<matplotlib.pyplot.show>`, you can explicitly control the
@@ -197,8 +197,8 @@ blocking behavior of `mg.show<mpl_gui.show>` via the *block* keyword argument ::
 
   fig = Figure(label='control blocking')
 
-  mg.show([fig], block=False)  # will never block
-  mg.show([fig], block=True)   # will always block
+  mg.show(fig, block=False)  # will never block
+  mg.show(fig, block=True)   # will always block
 
 
 The interactive state is shared Matplotlib and can also be controlled with

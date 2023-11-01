@@ -14,7 +14,7 @@ def test_no_pyplot():
 def test_promotion():
     fig = mg.Figure(label="test")
     assert fig.canvas.manager is None
-    mg.show([fig], block=False)
+    mg.show(*[fig], block=False)
     assert fig.canvas.manager is not None
 
 
@@ -32,7 +32,7 @@ def test_ion():
         ax = fig.subplots()
         (ln,) = ax.plot(range(5))
         ln.set_color("k")
-        mg.show([fig], timeout=1)
+        mg.show(*[fig], timeout=1)
     assert "start_event_loop" not in fig.canvas.call_info
 
 
@@ -43,7 +43,7 @@ def test_ioff():
 
 def test_timeout():
     fig = mg.Figure()
-    mg.show([fig], block=True, timeout=1)
+    mg.show(*[fig], block=True, timeout=1)
     assert "start_event_loop" in fig.canvas.call_info
 
 
@@ -89,7 +89,7 @@ def test_close_all():
 
     # test revive
     old_canvas = fig.canvas
-    mg.show([fig])
+    mg.show(fig)
     assert fig.canvas is not old_canvas
 
 
