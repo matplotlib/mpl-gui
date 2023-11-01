@@ -25,8 +25,13 @@ from ._figure import Figure  # noqa: F401
 from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
 from ._manage_backend import select_gui_toolkit  # noqa: F401
 from ._manage_backend import current_backend_module as _cbm
-from ._promotion import promote_figure as promote_figure
-from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
+from ._promotion import promote_figure as _promote_figure
+from ._creation import (
+    figure as _figure,
+    subplots as _subplots,
+    subplot_mosaic as _subplot_mosaic,
+)
+
 
 from ._version import get_versions
 
@@ -70,7 +75,7 @@ def show(figs, *, block=None, timeout=0):
         if fig.canvas.manager is not None:
             managers.append(fig.canvas.manager)
         else:
-            managers.append(promote_figure(fig, num=None))
+            managers.append(_promote_figure(fig, num=None))
 
     if block is None:
         block = not is_interactive()
@@ -151,7 +156,7 @@ class FigureRegistry:
             fig.set_label(f"{self._prefix}{fignum:d}")
         self._fig_to_number[fig] = fignum
         if is_interactive():
-            promote_figure(fig, num=fignum)
+            _promote_figure(fig, num=fignum)
         return fig
 
     @property
@@ -183,25 +188,25 @@ class FigureRegistry:
         self._ensure_all_figures_promoted()
         return {fig.canvas.manager.num: fig for fig in self.figures}
 
-    @functools.wraps(figure)
+    @functools.wraps(_figure)
     def figure(self, *args, **kwargs):
-        fig = figure(*args, **kwargs)
+        fig = _figure(*args, **kwargs)
         return self._register_fig(fig)
 
-    @functools.wraps(subplots)
+    @functools.wraps(_subplots)
     def subplots(self, *args, **kwargs):
-        fig, axs = subplots(*args, **kwargs)
+        fig, axs = _subplots(*args, **kwargs)
         return self._register_fig(fig), axs
 
-    @functools.wraps(subplot_mosaic)
+    @functools.wraps(_subplot_mosaic)
     def subplot_mosaic(self, *args, **kwargs):
-        fig, axd = subplot_mosaic(*args, **kwargs)
+        fig, axd = _subplot_mosaic(*args, **kwargs)
         return self._register_fig(fig), axd
 
     def _ensure_all_figures_promoted(self):
         for f in self.figures:
             if f.canvas.manager is None:
-                promote_figure(f, num=self._fig_to_number[f])
+                _promote_figure(f, num=self._fig_to_number[f])
 
     def show_all(self, *, block=None, timeout=None):
         """

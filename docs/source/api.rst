@@ -28,24 +28,6 @@ Interactivity
 Figure Fabrication
 ------------------
 
-Un-managed
-++++++++++
-
-
-.. autosummary::
-   :toctree: _as_gen
-   :nosignatures:
-
-   mpl_gui.figure
-   mpl_gui.subplots
-   mpl_gui.subplot_mosaic
-
-
-.. autosummary::
-   :toctree: _as_gen
-   :nosignatures:
-
-   mpl_gui.promote_figure
 
 Managed
 +++++++
