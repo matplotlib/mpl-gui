@@ -28,7 +28,7 @@ def is_interactive():
     --------
     ion : Enable interactive mode.
     ioff : Disable interactive mode.
-    show : Show all figures (and maybe block).
+    mpl_gui.show : Show all figures (and maybe block).
     """
     return _is_interact()
 
@@ -89,7 +89,7 @@ def ioff():
     --------
     ion : Enable interactive mode.
     is_interactive : Whether interactive mode is enabled.
-    show : Show all figures (and maybe block).
+    mpl_gui.show : Show all figures (and maybe block).
 
     Notes
     -----
@@ -124,7 +124,7 @@ def ion():
     --------
     ioff : Disable interactive mode.
     is_interactive : Whether interactive mode is enabled.
-    show : Show all figures (and maybe block).
+    mpl_gui.show : Show all figures (and maybe block).
 
     Notes
     -----

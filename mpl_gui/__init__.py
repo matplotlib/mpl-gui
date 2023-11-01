@@ -260,7 +260,7 @@ class FigureRegistry:
         4. drops its hard reference to the Figure
 
         If the user still holds a reference to the Figure it can be revived by
-        passing it to `show`.
+        passing it to `mpl_gui.show`.
 
         """
         for fig in list(self.figures):
