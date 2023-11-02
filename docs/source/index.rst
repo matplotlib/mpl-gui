@@ -50,9 +50,9 @@ Globally Managed Figures
 ========================
 
 
-The `mpl_gui.registry` module provides a direct analogy to the
+The `mpl_gui.global_figures` module provides a direct analogy to the
 `matplotlib.pyplot` behavior of having a global registry of figures.  Thus, any
-figures created via the functions in `.registry` will remain alive until they
+figures created via the functions in `.global_figures` will remain alive until they
 have been cleared from the registry (and the user has dropped all other
 references).  While it can be convenient, it carries with it the risk inherent
 in any use of global state.
@@ -61,23 +61,23 @@ The `matplotlib.pyplot` API related to figure creation, showing, and closing is 
 
 ::
 
-   import mpl_gui.registry as reg
+   import mpl_gui.global_figures as gfigs
 
-   fig = reg.figure()
-   fig, ax = reg.subplots()
-   fig, axd = reg.subplot_mosaic('AA\nCD')
+   fig = gfigs.figure()
+   fig, ax = gfigs.subplots()
+   fig, axd = gfigs.subplot_mosaic('AA\nCD')
 
-   reg.show(block=True)                # blocks until all figures are closed
-   reg.show(block=True, timeout=1000)  # blocks for up to 1s or all figures are closed
-   reg.show(block=False)               # does not block
-   reg.show()                          # depends on if in "interacitve mode"
+   gfigs.show(block=True)                # blocks until all figures are closed
+   gfigs.show(block=True, timeout=1000)  # blocks for up to 1s or all figures are closed
+   gfigs.show(block=False)               # does not block
+   gfigs.show()                          # depends on if in "interacitve mode"
 
-   reg.ion()                           # turn on interactive mode
-   reg.ioff()                          # turn off interactive mode
-   reg.is_interactive()                # query interactive state
+   gfigs.ion()                           # turn on interactive mode
+   gfigs.ioff()                          # turn off interactive mode
+   gfigs.is_interactive()                # query interactive state
 
-   reg.close('all')                    # close all open figures
-   reg.close(fig)                      # close a particular figure
+   gfigs.close('all')                    # close all open figures
+   gfigs.close(fig)                      # close a particular figure
 
 
 
@@ -146,7 +146,7 @@ This will create 3 figures and block on ``__exit__``.  The blocking
 behavior depends on `~mpl_gui.is_interactive()` (and follow the behavior of
 `.display` and `.FigureRegistry.show` can explicitly controlled via the *block* keyword argument).
 
-The `.registry` module is implemented by having a singleton `.FigureRegistry`
+The `.global_figures` module is implemented by having a singleton `.FigureRegistry`
 at the module level.
 
 

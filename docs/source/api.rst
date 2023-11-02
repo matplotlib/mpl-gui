@@ -96,7 +96,7 @@ Globally managed
 ----------------
 
 
-.. automodule:: mpl_gui.registry
+.. automodule:: mpl_gui.global_figures
    :no-undoc-members:
 
 
@@ -108,9 +108,9 @@ Create Figures and Axes
    :toctree: _as_gen
    :nosignatures:
 
-   mpl_gui.registry.figure
-   mpl_gui.registry.subplots
-   mpl_gui.registry.subplot_mosaic
+   mpl_gui.global_figures.figure
+   mpl_gui.global_figures.subplots
+   mpl_gui.global_figures.subplot_mosaic
 
 
 Access managed figures
@@ -121,7 +121,7 @@ Access managed figures
    :toctree: _as_gen
    :nosignatures:
 
-   mpl_gui.registry.by_label
+   mpl_gui.global_figures.by_label
 
 
 Show and close managed Figures
@@ -134,10 +134,10 @@ Show and close managed Figures
 
 
 
-   mpl_gui.registry.show
-   mpl_gui.registry.show_all
-   mpl_gui.registry.close_all
-   mpl_gui.registry.close
+   mpl_gui.global_figures.show
+   mpl_gui.global_figures.show_all
+   mpl_gui.global_figures.close_all
+   mpl_gui.global_figures.close
 
 
 Interactivity
@@ -148,6 +148,6 @@ Interactivity
    :nosignatures:
 
 
-   mpl_gui.registry.ion
-   mpl_gui.registry.ioff
-   mpl_gui.registry.is_interactive
+   mpl_gui.global_figures.ion
+   mpl_gui.global_figures.ioff
+   mpl_gui.global_figures.is_interactive
