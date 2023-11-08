@@ -87,13 +87,6 @@ def promote_figure(fig, *, auto_draw=True, num):
                 mgr._destroy_cid = None
             # close the window
             mgr.destroy()
-            # disconnect the manager from the canvas
-            fig.canvas.manager = None
-            # reset the dpi
-            fig.dpi = getattr(fig, "_original_dpi", fig.dpi)
-            # Go back to "base" canvas
-            # (this sets state on fig in the canvas init)
-            FigureCanvasBase(fig)
 
     manager._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy)
 
