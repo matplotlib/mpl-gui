@@ -46,38 +46,77 @@ If you want to be sure that this code does not secretly depend on pyplot run ::
 which will prevent pyplot from being imported!
 
 
-Globally Managed Figures
-========================
+
+Selecting the GUI toolkit
+=========================
+
+`mpl_gui` makes use of `Matplotlib backends
+<https://matplotlib.org/stable/users/explain/backends.html>`_ for actually
+providing the GUI bindings.  Analagous to `matplotlib.use` and
+`matplotlib.pyplot.switch_backend` `mpl_gui` provides
+`mpl_gui.select_gui_toolkit` to select which GUI toolkit is used.
+`~mpl_gui.select_gui_toolkit` has the same fall-back behavior as
+`~matplotlib.pyplot` and stores its state in :rc:`backend`.
+
+`mpl_gui` will
+consistently co-exist with `matplotlib.pyplot` managed Figures in the same
+process.
 
 
-The `mpl_gui.global_figures` module provides a direct analogy to the
-`matplotlib.pyplot` behavior of having a global registry of figures.  Thus, any
-figures created via the functions in `.global_figures` will remain alive until they
-have been cleared from the registry (and the user has dropped all other
-references).  While it can be convenient, it carries with it the risk inherent
-in any use of global state.
 
-The `matplotlib.pyplot` API related to figure creation, showing, and closing is a drop-in replacement:
+User Managed Figures
+====================
 
-::
+There are cases where having such a registry may be too much implicit state.
+For such cases the underlying tools that `.FigureRegistry` are built on are
+explicitly available ::
 
-   import mpl_gui.global_figures as gfigs
+  import mpl_gui as mg
+  from matplotlib.figure import Figure
 
-   fig = gfigs.figure()
-   fig, ax = gfigs.subplots()
-   fig, axd = gfigs.subplot_mosaic('AA\nCD')
+  fig1 = Figure(label='A Label!')
 
-   gfigs.show(block=True)                # blocks until all figures are closed
-   gfigs.show(block=True, timeout=1000)  # blocks for up to 1s or all figures are closed
-   gfigs.show(block=False)               # does not block
-   gfigs.show()                          # depends on if in "interacitve mode"
+  fig2 = Figure()
 
-   gfigs.ion()                           # turn on interactive mode
-   gfigs.ioff()                          # turn off interactive mode
-   gfigs.is_interactive()                # query interactive state
+  mg.display(fig1, fig2)
 
-   gfigs.close('all')                    # close all open figures
-   gfigs.close(fig)                      # close a particular figure
+
+which will show both figures and block until they are closed.  As part of the
+"showing" process, the correct GUI objects will be created, put on the
+screen, and the event loop for the host GUI framework is run.
+
+Similar to `plt.ion<matplotlib.pyplot.ion>` and
+`plt.ioff<matplotlib.pyplot.ioff>`, we provide `mg.ion()<mpl_gui.ion>` and
+`mg.ioff()<mpl_gui.ioff>` which have identical semantics.  Thus ::
+
+  import mpl_gui as mg
+  from matplotlib.figure import Figure
+
+  mg.ion()
+  print(mg.is_interactive())
+  fig = Figure()
+
+  mg.display([fig])  # will not block
+
+  mg.ioff()
+  print(mg.is_interactive())
+  mg.display(fig)  # will block!
+
+
+As with `plt.show<matplotlib.pyplot.show>`, you can explicitly control the
+blocking behavior of `mg.display<mpl_gui.display>` via the *block* keyword argument ::
+
+  import mpl_gui as mg
+  from matplotlib.figure import Figure
+
+  fig = Figure(label='control blocking')
+
+  mg.display(fig, block=False)  # will never block
+  mg.display(fig, block=True)   # will always block
+
+
+The interactive state is shared Matplotlib and can also be controlled with
+`matplotlib.interactive` and queried via `matplotlib.is_interactive`.
 
 
 
@@ -150,73 +189,37 @@ The `.global_figures` module is implemented by having a singleton `.FigureRegist
 at the module level.
 
 
-User Managed Figures
-====================
-
-There are cases where having such a registry may be too much implicit state.
-For such cases the underlying tools that `.FigureRegistry` are built on are
-explicitly available ::
-
-  import mpl_gui as mg
-  from matplotlib.figure import Figure
-
-  fig1 = Figure(label='A Label!')
-
-  fig2 = Figure()
-
-  mg.display(fig1, fig2)
 
 
-which will show both figures and block until they are closed.  As part of the
-"showing" process, the correct GUI objects will be created, put on the
-screen, and the event loop for the host GUI framework is run.
-
-Similar to `plt.ion<matplotlib.pyplot.ion>` and
-`plt.ioff<matplotlib.pyplot.ioff>`, we provide `mg.ion()<mpl_gui.ion>` and
-`mg.ioff()<mpl_gui.ioff>` which have identical semantics.  Thus ::
-
-  import mpl_gui as mg
-  from matplotlib.figure import Figure
-
-  mg.ion()
-  print(mg.is_interactive())
-  fig = Figure()
-
-  mg.display([fig])  # will not block
-
-  mg.ioff()
-  print(mg.is_interactive())
-  mg.display(fig)  # will block!
+Globally Managed Figures
+========================
 
 
-As with `plt.show<matplotlib.pyplot.show>`, you can explicitly control the
-blocking behavior of `mg.display<mpl_gui.display>` via the *block* keyword argument ::
+The `mpl_gui.global_figures` module provides a direct analogy to the
+`matplotlib.pyplot` behavior of having a global registry of figures.  Thus, any
+figures created via the functions in `.global_figures` will remain alive until they
+have been cleared from the registry (and the user has dropped all other
+references).  While it can be convenient, it carries with it the risk inherent
+in any use of global state.
 
-  import mpl_gui as mg
-  from matplotlib.figure import Figure
+The `matplotlib.pyplot` API related to figure creation, showing, and closing is a drop-in replacement:
 
-  fig = Figure(label='control blocking')
+::
 
-  mg.display(fig, block=False)  # will never block
-  mg.display(fig, block=True)   # will always block
+   import mpl_gui.global_figures as gfigs
 
+   fig = gfigs.figure()
+   fig, ax = gfigs.subplots()
+   fig, axd = gfigs.subplot_mosaic('AA\nCD')
 
-The interactive state is shared Matplotlib and can also be controlled with
-`matplotlib.interactive` and queried via `matplotlib.is_interactive`.
+   gfigs.show(block=True)                # blocks until all figures are closed
+   gfigs.show(block=True, timeout=1000)  # blocks for up to 1s or all figures are closed
+   gfigs.show(block=False)               # does not block
+   gfigs.show()                          # depends on if in "interacitve mode"
 
+   gfigs.ion()                           # turn on interactive mode
+   gfigs.ioff()                          # turn off interactive mode
+   gfigs.is_interactive()                # query interactive state
 
-
-Selecting the GUI toolkit
-=========================
-
-`mpl_gui` makes use of `Matplotlib backends
-<https://matplotlib.org/stable/users/explain/backends.html>`_ for actually
-providing the GUI bindings.  Analagous to `matplotlib.use` and
-`matplotlib.pyplot.switch_backend` `mpl_gui` provides
-`mpl_gui.select_gui_toolkit` to select which GUI toolkit is used.
-`~mpl_gui.select_gui_toolkit` has the same fall-back behavior as
-`~matplotlib.pyplot` and stores its state in :rc:`backend`.
-
-`mpl_gui` will
-consistently co-exist with `matplotlib.pyplot` managed Figures in the same
-process.
+   gfigs.close('all')                    # close all open figures
+   gfigs.close(fig)                      # close a particular figure
