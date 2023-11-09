@@ -10,20 +10,9 @@ Select the backend
 ------------------
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.select_gui_toolkit
-
-
-Display
--------
-
-.. autosummary::
-   :toctree: _as_gen
-   :nosignatures:
-
-
-   mpl_gui.display
 
 
 Interactivity
@@ -31,11 +20,44 @@ Interactivity
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.ion
    mpl_gui.ioff
    mpl_gui.is_interactive
+
+
+Unmanaged Figures
+-----------------
+
+Figure Creation
++++++++++++++++
+
+These are not strictly necessary as they are only thin wrappers around creating
+a `matplotlib.figure.Figure` instance and creating children in one line.
+
+.. autosummary::
+   :toctree: _as_gen
+
+
+
+   mpl_gui.figure
+   mpl_gui.subplots
+   mpl_gui.subplot_mosaic
+
+
+
+Display
++++++++
+
+.. autosummary::
+   :toctree: _as_gen
+
+
+
+   mpl_gui.display
+   mpl_gui.demote_figure
+
 
 
 Locally Managed Figures
@@ -56,7 +78,7 @@ Create Figures and Axes
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.FigureRegistry.figure
    mpl_gui.FigureRegistry.subplots
@@ -68,7 +90,7 @@ Access managed figures
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.FigureRegistry.by_label
    mpl_gui.FigureRegistry.by_number
@@ -82,7 +104,7 @@ Show and close managed Figures
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.FigureRegistry.show_all
    mpl_gui.FigureRegistry.close_all
@@ -106,7 +128,7 @@ Create Figures and Axes
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.global_figures.figure
    mpl_gui.global_figures.subplots
@@ -119,7 +141,7 @@ Access managed figures
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
    mpl_gui.global_figures.by_label
 
@@ -130,7 +152,7 @@ Show and close managed Figures
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
 
 
@@ -145,7 +167,7 @@ Interactivity
 
 .. autosummary::
    :toctree: _as_gen
-   :nosignatures:
+
 
 
    mpl_gui.global_figures.ion

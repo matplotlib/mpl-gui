@@ -29,11 +29,14 @@ from ._manage_interactive import (  # noqa: F401
 )
 from ._manage_backend import select_gui_toolkit as select_gui_toolkit  # noqa: F401
 from ._manage_backend import current_backend_module as _cbm
-from ._promotion import promote_figure as _promote_figure
+from ._promotion import (
+    promote_figure as _promote_figure,
+    demote_figure as demote_figure,
+)
 from ._creation import (
-    figure as _figure,
-    subplots as _subplots,
-    subplot_mosaic as _subplot_mosaic,
+    figure as figure,
+    subplots as subplots,
+    subplot_mosaic as subplot_mosaic,
 )
 
 
@@ -195,19 +198,19 @@ class FigureRegistry:
         self._ensure_all_figures_promoted()
         return {fig.canvas.manager.num: fig for fig in self.figures}
 
-    @functools.wraps(_figure)
+    @functools.wraps(figure)
     def figure(self, *args, **kwargs):
-        fig = _figure(*args, **kwargs)
+        fig = figure(*args, **kwargs)
         return self._register_fig(fig)
 
-    @functools.wraps(_subplots)
+    @functools.wraps(subplots)
     def subplots(self, *args, **kwargs):
-        fig, axs = _subplots(*args, **kwargs)
+        fig, axs = subplots(*args, **kwargs)
         return self._register_fig(fig), axs
 
-    @functools.wraps(_subplot_mosaic)
+    @functools.wraps(subplot_mosaic)
     def subplot_mosaic(self, *args, **kwargs):
-        fig, axd = _subplot_mosaic(*args, **kwargs)
+        fig, axd = subplot_mosaic(*args, **kwargs)
         return self._register_fig(fig), axd
 
     def _ensure_all_figures_promoted(self):
