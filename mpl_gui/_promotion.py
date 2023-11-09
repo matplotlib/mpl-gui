@@ -83,6 +83,27 @@ def promote_figure(fig, *, auto_draw=True, num):
 
     # remove this callback.  Callbacks live on the Figure so survive the canvas
     # being replaced.
-    fig.canvas.mpl_connect("key_press_event", _destroy_on_hotkey)
+    fig._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy_on_hotkey)
 
     return manager
+
+
+def demote_figure(fig):
+    """Fully clear all GUI elements from the `~matplotlib.figure.Figure`.
+
+    The opposite of what is done during `mpl_gui.display`.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure
+
+    """
+    fig.canvas.destroy()
+    fig.canvas.manager = None
+    original_dpi = getattr(fig, "_original_dpi", fig.dpi)
+    if (cid := getattr(fig, '_destroy_cid', None)) is not None:
+        fig.canvas.mpl_disconnect(cid)
+    FigureCanvasBase(fig)
+    fig.dpi = original_dpi
+
+    return fig
