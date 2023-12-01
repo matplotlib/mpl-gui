@@ -129,6 +129,9 @@ html_theme_options = {
     # and CI builds https://github.com/pydata/pydata-sphinx-theme/pull/386
     "collapse_navigation": not is_release_build,
     "show_prev_next": False,
+    "navigation_with_keys": False,
+    # "secondary_sidebar_items": "page-toc.html",
+    "footer_start": ["copyright", "sphinx-version", "doc_version"],
 }
 include_analytics = is_release_build
 if include_analytics:
@@ -153,9 +156,6 @@ html_static_path = ["_static"]
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
-    "**": [
-        "relations.html",  # needs 'show_related': True theme option to display
-    ]
 }
 
 

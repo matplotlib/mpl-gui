@@ -22,11 +22,23 @@ from matplotlib.backend_bases import FigureCanvasBase as _FigureCanvasBase
 
 from ._figure import Figure  # noqa: F401
 
-from ._manage_interactive import ion, ioff, is_interactive  # noqa: F401
-from ._manage_backend import select_gui_toolkit  # noqa: F401
+from ._manage_interactive import (  # noqa: F401
+    ion as ion,
+    ioff as ioff,
+    is_interactive as is_interactive,
+)
+from ._manage_backend import select_gui_toolkit as select_gui_toolkit  # noqa: F401
 from ._manage_backend import current_backend_module as _cbm
-from ._promotion import promote_figure as promote_figure
-from ._creation import figure, subplots, subplot_mosaic  # noqa: F401
+from ._promotion import (
+    promote_figure as _promote_figure,
+    demote_figure as demote_figure,
+)
+from ._creation import (
+    figure as figure,
+    subplots as subplots,
+    subplot_mosaic as subplot_mosaic,
+)
+
 
 from ._version import get_versions
 
@@ -37,13 +49,13 @@ del get_versions
 _log = logging.getLogger(__name__)
 
 
-def show(figs, *, block=None, timeout=0):
+def display(*figs, block=None, timeout=0):
     """
     Show the figures and maybe block.
 
     Parameters
     ----------
-    figs : List[Figure]
+    *figs : Figure
         The figures to show.  If they do not currently have a GUI aware
         canvas + manager attached they will be promoted.
 
@@ -60,6 +72,9 @@ def show(figs, *, block=None, timeout=0):
         Defaults to True in non-interactive mode and to False in interactive
         mode (see `.is_interactive`).
 
+    timeout : float, optional
+        How long to run the event loop in msec if blocking.
+
     """
     # TODO handle single figure
 
@@ -70,7 +85,7 @@ def show(figs, *, block=None, timeout=0):
         if fig.canvas.manager is not None:
             managers.append(fig.canvas.manager)
         else:
-            managers.append(promote_figure(fig, num=None))
+            managers.append(_promote_figure(fig, num=None))
 
     if block is None:
         block = not is_interactive()
@@ -151,7 +166,7 @@ class FigureRegistry:
             fig.set_label(f"{self._prefix}{fignum:d}")
         self._fig_to_number[fig] = fignum
         if is_interactive():
-            promote_figure(fig, num=fignum)
+            _promote_figure(fig, num=fignum)
         return fig
 
     @property
@@ -201,7 +216,7 @@ class FigureRegistry:
     def _ensure_all_figures_promoted(self):
         for f in self.figures:
             if f.canvas.manager is None:
-                promote_figure(f, num=self._fig_to_number[f])
+                _promote_figure(f, num=self._fig_to_number[f])
 
     def show_all(self, *, block=None, timeout=None):
         """
@@ -235,7 +250,7 @@ class FigureRegistry:
         if timeout is None:
             timeout = self._timeout
         self._ensure_all_figures_promoted()
-        show(self.figures, block=self._block, timeout=self._timeout)
+        display(*self.figures, block=self._block, timeout=self._timeout)
 
     # alias to easy pyplot compatibility
     show = show_all
@@ -252,7 +267,7 @@ class FigureRegistry:
         4. drops its hard reference to the Figure
 
         If the user still holds a reference to the Figure it can be revived by
-        passing it to `show`.
+        passing it to `mpl_gui.display`.
 
         """
         for fig in list(self.figures):
@@ -267,16 +282,16 @@ class FigureRegistry:
         - start the destruction process of an UI (the event loop may need to
           run to complete this process and if the user is holding hard
           references to any of the UI elements they may remain alive).
-        - Remove the `Figure` from this Registry.
+        - Remove the `~matplotlib.figure.Figure` from this Registry.
 
         We will no longer have any hard references to the Figure, but if
-        the user does the `Figure` (and its components) will not be garbage
+        the user does the `~matplotlib.figure.Figure` (and its components) will not be garbage
         collected.  Due to the circular references in Matplotlib these
         objects may not be collected until the full cyclic garbage collection
         runs.
 
-        If the user still has a reference to the `Figure` they can re-show the
-        figure via `show`, but the `FigureRegistry` will not be aware of it.
+        If the user still has a reference to the `~matplotlib.figure.Figure` they can re-show the
+        figure via `show`, but the `.FigureRegistry` will not be aware of it.
 
         Parameters
         ----------
@@ -285,9 +300,9 @@ class FigureRegistry:
             - The special case of 'all' closes all open Figures
             - If any other string is passed, it is interpreted as a key in
               `by_label` and that Figure is closed
-            - If an integer it is interpreted as a key in `by_number` and that
+            - If an integer it is interpreted as a key in `.FigureRegistry.by_number` and that
               Figure is closed
-            - If it is a `Figure` instance, then that figure is closed
+            - If it is a `~matplotlib.figure.Figure` instance, then that figure is closed
 
         """
         if val == "all":
@@ -356,7 +371,7 @@ class FigureContext(FigureRegistry):
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value is not None and not self._forgive_failure:
             return
-        show(self.figures, block=self._block, timeout=self._timeout)
+        display(*self.figures, block=self._block, timeout=self._timeout)
 
 
 # from mpl_gui import * # is a langauge miss-feature

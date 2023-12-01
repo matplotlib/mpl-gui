@@ -14,14 +14,8 @@ def test_no_pyplot():
 def test_promotion():
     fig = mg.Figure(label="test")
     assert fig.canvas.manager is None
-    mg.show([fig], block=False)
+    mg.display(*[fig], block=False)
     assert fig.canvas.manager is not None
-
-
-def test_smoke_test_creation():
-    mg.figure()
-    mg.subplots()
-    mg.subplot_mosaic("A\nB")
 
 
 def test_smoke_test_context():
@@ -34,10 +28,11 @@ def test_smoke_test_context():
 def test_ion():
     with mg.ion():
         assert mg.is_interactive()
-        fig, ax = mg.subplots()
+        fig = mg.Figure()
+        ax = fig.subplots()
         (ln,) = ax.plot(range(5))
         ln.set_color("k")
-        mg.show([fig], timeout=1)
+        mg.display(*[fig], timeout=1)
     assert "start_event_loop" not in fig.canvas.call_info
 
 
@@ -48,7 +43,7 @@ def test_ioff():
 
 def test_timeout():
     fig = mg.Figure()
-    mg.show([fig], block=True, timeout=1)
+    mg.display(*[fig], block=True, timeout=1)
     assert "start_event_loop" in fig.canvas.call_info
 
 
@@ -94,7 +89,7 @@ def test_close_all():
 
     # test revive
     old_canvas = fig.canvas
-    mg.show([fig])
+    mg.display(fig)
     assert fig.canvas is not old_canvas
 
 

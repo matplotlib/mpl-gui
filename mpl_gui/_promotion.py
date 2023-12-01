@@ -72,29 +72,38 @@ def promote_figure(fig, *, auto_draw=True, num):
 
     # HACK: the callback in backend_bases uses GCF.destroy which misses these
     # figures by design!
-    def _destroy(event):
+    def _destroy_on_hotkey(event):
         if event.key in mpl.rcParams["keymap.quit"]:
             # grab the manager off the event
             mgr = event.canvas.manager
             if mgr is None:
-                raise RuntimeError("Should never be here, please report a bug")
-            fig = event.canvas.figure
-            # remove this callback.  Callbacks lives on the Figure so survive
-            # the canvas being replaced.
-            old_cid = getattr(mgr, "_destroy_cid", None)
-            if old_cid is not None:
-                fig.canvas.mpl_disconnect(old_cid)
-                mgr._destroy_cid = None
+                raise RuntimeError("Should never be here, please report a bug.")
             # close the window
             mgr.destroy()
-            # disconnect the manager from the canvas
-            fig.canvas.manager = None
-            # reset the dpi
-            fig.dpi = getattr(fig, "_original_dpi", fig.dpi)
-            # Go back to "base" canvas
-            # (this sets state on fig in the canvas init)
-            FigureCanvasBase(fig)
 
-    manager._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy)
+    # remove this callback.  Callbacks live on the Figure so survive the canvas
+    # being replaced.
+    fig._destroy_cid = fig.canvas.mpl_connect("key_press_event", _destroy_on_hotkey)
 
     return manager
+
+
+def demote_figure(fig):
+    """Fully clear all GUI elements from the `~matplotlib.figure.Figure`.
+
+    The opposite of what is done during `mpl_gui.display`.
+
+    Parameters
+    ----------
+    fig : matplotlib.figure.Figure
+
+    """
+    fig.canvas.destroy()
+    fig.canvas.manager = None
+    original_dpi = getattr(fig, "_original_dpi", fig.dpi)
+    if (cid := getattr(fig, '_destroy_cid', None)) is not None:
+        fig.canvas.mpl_disconnect(cid)
+    FigureCanvasBase(fig)
+    fig.dpi = original_dpi
+
+    return fig

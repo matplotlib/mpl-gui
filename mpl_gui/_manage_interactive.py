@@ -14,21 +14,21 @@ def is_interactive():
 
     - newly created figures will be shown immediately;
     - figures will automatically redraw on change;
-    - `mpl_gui.show` will not block by default.
+    - `.display` will not block by default.
     - `mpl_gui.FigureContext` will not block on ``__exit__`` by default.
 
     In non-interactive mode:
 
     - newly created figures and changes to figures will not be reflected until
       explicitly asked to be;
-    - `mpl_gui.show` will block by default.
+    - `.display` will block by default.
     - `mpl_gui.FigureContext` will block on ``__exit__`` by default.
 
     See Also
     --------
     ion : Enable interactive mode.
     ioff : Disable interactive mode.
-    show : Show all figures (and maybe block).
+    mpl_gui.display : Show all figures (and maybe block).
     """
     return _is_interact()
 
@@ -89,7 +89,7 @@ def ioff():
     --------
     ion : Enable interactive mode.
     is_interactive : Whether interactive mode is enabled.
-    show : Show all figures (and maybe block).
+    mpl_gui.display : Show all figures (and maybe block).
 
     Notes
     -----
@@ -124,7 +124,7 @@ def ion():
     --------
     ioff : Disable interactive mode.
     is_interactive : Whether interactive mode is enabled.
-    show : Show all figures (and maybe block).
+    mpl_gui.display : Show all figures (and maybe block).
 
     Notes
     -----
