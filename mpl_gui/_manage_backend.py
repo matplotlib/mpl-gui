@@ -5,6 +5,7 @@ import types
 
 from matplotlib import cbook, rcsetup
 from matplotlib import rcParams, rcParamsDefault
+from matplotlib.backends.registry import backend_registry
 import matplotlib.backend_bases
 
 
@@ -92,7 +93,7 @@ def select_gui_toolkit(newbackend=None):
         if newbackend.lower() == "tkagg":
             backend_name = f"mpl_gui._patched_backends.{newbackend.lower()}"
         else:
-            backend_name = cbook._backend_module_name(newbackend)
+            backend_name = backend_registry._backend_module_name(newbackend)
 
         mod = importlib.import_module(backend_name)
         if hasattr(mod, "Backend"):
