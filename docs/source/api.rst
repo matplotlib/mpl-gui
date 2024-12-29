@@ -12,7 +12,7 @@ Select the backend
    :toctree: _as_gen
 
 
-   mpl_gui.select_gui_toolkit
+   select_gui_toolkit
 
 
 Interactivity
@@ -22,9 +22,9 @@ Interactivity
    :toctree: _as_gen
 
 
-   mpl_gui.ion
-   mpl_gui.ioff
-   mpl_gui.is_interactive
+   ion
+   ioff
+   is_interactive
 
 
 Unmanaged Figures
@@ -41,9 +41,9 @@ a `matplotlib.figure.Figure` instance and creating children in one line.
 
 
 
-   mpl_gui.figure
-   mpl_gui.subplots
-   mpl_gui.subplot_mosaic
+   figure
+   subplots
+   subplot_mosaic
 
 
 
@@ -55,8 +55,8 @@ Display
 
 
 
-   mpl_gui.display
-   mpl_gui.demote_figure
+   display
+   demote_figure
 
 
 
@@ -64,12 +64,12 @@ Locally Managed Figures
 -----------------------
 
 
-.. autoclass:: mpl_gui.FigureRegistry
+.. autoclass:: FigureRegistry
    :no-undoc-members:
    :show-inheritance:
 
 
-.. autoclass::    mpl_gui.FigureContext
+.. autoclass::    FigureContext
    :no-undoc-members:
    :show-inheritance:
 
@@ -80,9 +80,9 @@ Create Figures and Axes
    :toctree: _as_gen
 
 
-   mpl_gui.FigureRegistry.figure
-   mpl_gui.FigureRegistry.subplots
-   mpl_gui.FigureRegistry.subplot_mosaic
+   FigureRegistry.figure
+   FigureRegistry.subplots
+   FigureRegistry.subplot_mosaic
 
 
 Access managed figures
@@ -92,9 +92,9 @@ Access managed figures
    :toctree: _as_gen
 
 
-   mpl_gui.FigureRegistry.by_label
-   mpl_gui.FigureRegistry.by_number
-   mpl_gui.FigureRegistry.figures
+   FigureRegistry.by_label
+   FigureRegistry.by_number
+   FigureRegistry.figures
 
 
 
@@ -106,10 +106,10 @@ Show and close managed Figures
    :toctree: _as_gen
 
 
-   mpl_gui.FigureRegistry.show_all
-   mpl_gui.FigureRegistry.close_all
-   mpl_gui.FigureRegistry.show
-   mpl_gui.FigureRegistry.close
+   FigureRegistry.show_all
+   FigureRegistry.close_all
+   FigureRegistry.show
+   FigureRegistry.close
 
 
 
@@ -130,9 +130,9 @@ Create Figures and Axes
    :toctree: _as_gen
 
 
-   mpl_gui.global_figures.figure
-   mpl_gui.global_figures.subplots
-   mpl_gui.global_figures.subplot_mosaic
+   figure
+   subplots
+   subplot_mosaic
 
 
 Access managed figures
@@ -143,7 +143,7 @@ Access managed figures
    :toctree: _as_gen
 
 
-   mpl_gui.global_figures.by_label
+   by_label
 
 
 Show and close managed Figures
@@ -156,10 +156,10 @@ Show and close managed Figures
 
 
 
-   mpl_gui.global_figures.show
-   mpl_gui.global_figures.show_all
-   mpl_gui.global_figures.close_all
-   mpl_gui.global_figures.close
+   show
+   show_all
+   close_all
+   close
 
 
 Interactivity
@@ -170,6 +170,6 @@ Interactivity
 
 
 
-   mpl_gui.global_figures.ion
-   mpl_gui.global_figures.ioff
-   mpl_gui.global_figures.is_interactive
+   ion
+   ioff
+   is_interactive
