@@ -49,8 +49,7 @@
 
 - New import and documentation (inertia relative to pyplot)
 - `mg.show()` doesn't know what figures to show, so it must be supplied a list of figures.
-   - sometimes we create figures in loops, and assigning a different variable name to each figure to stop if from being dereferenced could be cumbersome.
-
+   - sometimes we create figures in loops, and assigning a different variable name to each figure to stop it from being dereferenced could be cumbersome.
 ### `mpl_gui.registry`
 
 - `import matplotlib.mpl_gui.registry as mr; fig, ax = mr.subplots()`
