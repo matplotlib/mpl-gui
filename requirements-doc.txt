@@ -6,3 +6,4 @@ mpl-sphinx-theme~=3.9.0
 numpydoc
 sphinx
 sphinx-copybutton
+myst-parser
