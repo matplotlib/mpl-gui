@@ -14,6 +14,7 @@
    api
    release_history
    min_versions
+   Api_Notes
 
 
 Motivation
